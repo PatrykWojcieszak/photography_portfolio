@@ -8,6 +8,7 @@ export const ImageCard = ({ src, alt, title }: ImageCardProps) => {
         src={src}
         alt={alt}
         height={500}
+        width={333}
         className="border border-white/50 rounded-lg cursor-pointer"
       />
       <span className="absolute bottom-0 text-gray text-center w-full uppercase bg-black/60 p-3">

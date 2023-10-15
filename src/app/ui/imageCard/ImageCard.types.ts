@@ -1,7 +1,7 @@
 import { StaticImageData } from "next/image";
 
 export type ImageCardProps = {
-  src: StaticImageData;
+  src: string;
   alt: string;
   title: string;
 };

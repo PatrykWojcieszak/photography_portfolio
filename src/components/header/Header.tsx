@@ -6,8 +6,12 @@ const ICON_SIZE = 32;
 
 export const Header = () => {
   return (
-    <div className="flex justify-between items-center h-16 pt-6">
-      <h1 className="text-white text-2xl">Patryk Wojcieszak</h1>
+    <div className="flex justify-between items-center h-16 pt-6 w-full">
+      <Link href="/">
+        <h1 className="text-white text-2xl cursor-pointer">
+          Patryk Wojcieszak
+        </h1>
+      </Link>
       <div className="flex gap-4">
         <Link
           href="https://www.instagram.com/p.w_shots"

@@ -3,8 +3,8 @@ import { firestore } from "@/firebase/firebase";
 import { PhotographyCollection } from "@/components/cardList/CardList.types";
 import { CardList } from "@/components/cardList/CardList";
 
-const getData = async () => {
-  const collectionData = await getDocs(collection(firestore, "homePage"));
+const getData = async (collectionName: string) => {
+  const collectionData = await getDocs(collection(firestore, collectionName));
 
   const result: PhotographyCollection[] = [];
 
@@ -15,8 +15,8 @@ const getData = async () => {
   return result;
 };
 
-export default async function asyncHome() {
-  const homePageCards = await getData();
+export default async function Page({ params }: { params: { id: string } }) {
+  const photoCards = await getData(params.id);
 
-  return <CardList cards={homePageCards} />;
+  return <CardList cards={photoCards} />;
 }

@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import { Header } from "./header/Header";
+import { Header } from "../components/header/Header";
 
 const inter = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -23,9 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex flex-col h-full px-12 gap-5">
-          <Header />
-          {children}
+        <div className="flex justify-center w-full">
+          <div className="flex flex-col h-full px-12 gap-5 max-w-[2580px] w-full">
+            <Header />
+            {children}
+          </div>
         </div>
       </body>
     </html>

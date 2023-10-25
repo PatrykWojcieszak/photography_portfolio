@@ -2,7 +2,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "@/firebase/firebase";
 import { MasonryGallery } from "@/components/masonryGallery/MasonryGallery";
 import { Photo } from "@/components/masonryGallery/MasonryGallery.types";
-import { getPictures } from "@/app/api/pictures";
+import cloudinary from "@/utils/cloudinary";
+import getBase64ImageUrl from "@/utils/generateBlurPlaceholder";
 
 const getData = async (collectionName: string) => {
   const collectionData = await getDocs(collection(firestore, collectionName));
@@ -13,19 +14,38 @@ const getData = async (collectionName: string) => {
     result.push(data.data() as Photo);
   });
 
-  const pictures = await getPictures(result.map((photo) => photo.photoId));
-  console.log("tatras pictures", pictures);
-  console.log("tatras photos", result);
+  const chunk = 100;
+
+  const photoIds = result.map((photo) => photo.photoId);
+
+  const splittedUserIds = Array(Math.ceil(photoIds.length / chunk))
+    .fill(0)
+    .map((_, index) => photoIds.slice(index * chunk, index * chunk + chunk));
+
+  const cloudinaryRequest = splittedUserIds.map((idsChunk) =>
+    cloudinary.v2.api.resources_by_ids(idsChunk)
+  );
+
+  const cloudinaryResult = await Promise.all(cloudinaryRequest);
+
+  const resources = cloudinaryResult.flatMap((res) => res.resources);
+
+  const blurImagePromises = resources.map((image) => {
+    return getBase64ImageUrl(image.public_id);
+  });
+  const imagesWithBlurDataUrls = await Promise.all(blurImagePromises);
+
+  for (let i = 0; i < result.length; i++) {
+    result[i].small = imagesWithBlurDataUrls[i];
+  }
 
   const finalResult = result.map((photo) => {
-    const cloudinaryPhoto = pictures.find(
+    const cloudinaryPhoto = resources.find(
       (cloudinaryPhoto) => cloudinaryPhoto.id === photo.photoId
     );
 
     return { ...photo, ...(cloudinaryPhoto ?? {}) };
   });
-
-  console.log("finalResult", finalResult);
 
   return finalResult;
 };

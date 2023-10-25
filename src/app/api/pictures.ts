@@ -8,8 +8,19 @@ cloudinary.v2.config({
 });
 
 export const getPictures = async (ids: string[]) => {
-  const { resources } = await cloudinary.v2.api.resources_by_ids(ids);
-  console.log("resources", resources);
+  const chunk = 100;
+
+  const splittedUserIds = Array(Math.ceil(ids.length / chunk))
+    .fill(0)
+    .map((_, index) => ids.slice(index * chunk, index * chunk + chunk));
+
+  const cloudinaryRequest = splittedUserIds.map((idsChunk) =>
+    cloudinary.v2.api.resources_by_ids(idsChunk)
+  );
+
+  const result = await Promise.all(cloudinaryRequest);
+
+  const resources = result.flatMap((res) => res.resources);
   const urls = await resources.map((resource) => {
     const smallUrl = getThumbnail(resource.public_id);
 

@@ -17,9 +17,9 @@ export const ExpandedPhoto = ({
           fill
           style={{ objectFit: "contain" }}
           src={large}
-          placeholder="blur"
+          // placeholder="blur"
           loading="lazy"
-          blurDataURL={small}
+          // blurDataURL={small}
         />
       </div>
     </div>

@@ -33,7 +33,7 @@ export const Photo = ({ alt, photoId, size, large, small }: PhotoProps) => {
         onMouseLeave={() => setIsHovering(false)}>
         <Image
           key={photoId}
-          src={large}
+          src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_720/${photoId}.webp`}
           alt={alt}
           width={
             size === PhotoSize.VERTICAL
@@ -42,8 +42,8 @@ export const Photo = ({ alt, photoId, size, large, small }: PhotoProps) => {
           }
           height={PHOTO_HEIGHT}
           loading="lazy"
-          blurDataURL={small}
           placeholder="blur"
+          blurDataURL={small}
           className="rounded-lg"
         />
         {isHovering && (

@@ -11,7 +11,7 @@ const PHOTO_HEIGHT = 540;
 const PHOTO_VERTICAL_WIDTH = 490;
 const PHOTO_HORIZONTAL_WIDTH = 960;
 
-export const Photo = ({ alt, photoId, size, large, small }: PhotoProps) => {
+export const Photo = ({ alt, photoId, size, blurPhotoData }: PhotoProps) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isPhotoExpanded, setIsPhotoExpanded] = useState(false);
 
@@ -22,8 +22,7 @@ export const Photo = ({ alt, photoId, size, large, small }: PhotoProps) => {
           alt={alt}
           photoId={photoId}
           size={size}
-          large={large}
-          small={small}
+          blurPhotoData={blurPhotoData}
           closeExpandedMode={() => setIsPhotoExpanded(false)}
         />
       )}
@@ -43,7 +42,7 @@ export const Photo = ({ alt, photoId, size, large, small }: PhotoProps) => {
           height={PHOTO_HEIGHT}
           loading="lazy"
           placeholder="blur"
-          blurDataURL={small}
+          blurDataURL={blurPhotoData}
           className="rounded-lg"
         />
         {isHovering && (

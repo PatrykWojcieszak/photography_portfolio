@@ -15,10 +15,6 @@ export default async function getBase64ImageUrl(
   const response = await fetch(
     `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/f_jpg,w_8,q_70/${public_id}.webp`
   );
-  // const buffer = await response.arrayBuffer();
-  // const minified = await imagemin.buffer(Buffer.from(buffer), {
-  //   plugins: [imageminJpegtran()],
-  // });
 
   const buffer = await (await fetch(responseUrl)).arrayBuffer();
   const base64 = await encode(buffer);

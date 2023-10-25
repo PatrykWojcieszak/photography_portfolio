@@ -4,7 +4,7 @@ import { ExpandedPhotoProps } from "./ExpandedPhoto.types";
 export const ExpandedPhoto = ({
   alt,
   closeExpandedMode,
-  small,
+  blurPhotoData,
   photoId,
 }: ExpandedPhotoProps) => {
   return (
@@ -19,7 +19,7 @@ export const ExpandedPhoto = ({
           src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_3440/${photoId}.webp`}
           placeholder="blur"
           loading="lazy"
-          blurDataURL={small}
+          blurDataURL={blurPhotoData}
         />
       </div>
     </div>

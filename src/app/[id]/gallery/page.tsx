@@ -5,42 +5,55 @@ import { Photo } from "@/components/masonryGallery/MasonryGallery.types";
 import cloudinary from "@/utils/cloudinary";
 import getBase64ImageUrl from "@/utils/generateBlurPlaceholder";
 
+const CLOUDINARY_IDS_CHUNK = 100;
+
 const getData = async (collectionName: string) => {
-  const collectionData = await getDocs(collection(firestore, collectionName));
+  const galleryFirestoreData = await getDocs(
+    collection(firestore, collectionName)
+  );
 
   const result: Photo[] = [];
 
-  collectionData.forEach((data) => {
-    result.push(data.data() as Photo);
-  });
+  galleryFirestoreData.forEach((data) => {
+    const photoData = data.data();
 
-  const chunk = 100;
+    if ((photoData as Photo)?.photoId) {
+      result.push(data.data() as Photo);
+    }
+  });
 
   const photoIds = result.map((photo) => photo.photoId);
 
-  const splittedUserIds = Array(Math.ceil(photoIds.length / chunk))
+  const splittedUserIdChunks = Array(
+    Math.ceil(photoIds.length / CLOUDINARY_IDS_CHUNK)
+  )
     .fill(0)
-    .map((_, index) => photoIds.slice(index * chunk, index * chunk + chunk));
+    .map((_, index) =>
+      photoIds.slice(
+        index * CLOUDINARY_IDS_CHUNK,
+        index * CLOUDINARY_IDS_CHUNK + CLOUDINARY_IDS_CHUNK
+      )
+    );
 
-  const cloudinaryRequest = splittedUserIds.map((idsChunk) =>
+  const cloudinaryPhotoPromises = splittedUserIdChunks.map((idsChunk) =>
     cloudinary.v2.api.resources_by_ids(idsChunk)
   );
 
-  const cloudinaryResult = await Promise.all(cloudinaryRequest);
+  const cloudinaryPhotos = await Promise.all(cloudinaryPhotoPromises);
 
-  const resources = cloudinaryResult.flatMap((res) => res.resources);
+  const cloudinaryResources = cloudinaryPhotos.flatMap((res) => res.resources);
 
-  const blurImagePromises = resources.map((image) => {
+  const blurImagePromises = cloudinaryResources.map((image) => {
     return getBase64ImageUrl(image.public_id);
   });
   const imagesWithBlurDataUrls = await Promise.all(blurImagePromises);
 
   for (let i = 0; i < result.length; i++) {
-    result[i].small = imagesWithBlurDataUrls[i];
+    result[i].blurPhotoData = imagesWithBlurDataUrls[i];
   }
 
   const finalResult = result.map((photo) => {
-    const cloudinaryPhoto = resources.find(
+    const cloudinaryPhoto = cloudinaryResources.find(
       (cloudinaryPhoto) => cloudinaryPhoto.id === photo.photoId
     );
 

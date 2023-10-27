@@ -6,12 +6,13 @@ import { PhotoSize } from "../masonryGallery/MasonryGallery.types";
 import { useState } from "react";
 import { ExpandedPhoto } from "./expandedPhoto/ExpandedPhoto";
 import { PhotoDetails } from "./photoDetails/PhotoDetails";
+import { shimmerLoader } from "@/utils/getShimmerLoader";
 
 const PHOTO_HEIGHT = 540;
 const PHOTO_VERTICAL_WIDTH = 490;
 const PHOTO_HORIZONTAL_WIDTH = 960;
 
-export const Photo = ({ alt, photoId, size, blurPhotoData }: PhotoProps) => {
+export const Photo = ({ alt, photoId, size }: PhotoProps) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isPhotoExpanded, setIsPhotoExpanded] = useState(false);
 
@@ -22,7 +23,6 @@ export const Photo = ({ alt, photoId, size, blurPhotoData }: PhotoProps) => {
           alt={alt}
           photoId={photoId}
           size={size}
-          blurPhotoData={blurPhotoData}
           closeExpandedMode={() => setIsPhotoExpanded(false)}
         />
       )}
@@ -41,8 +41,7 @@ export const Photo = ({ alt, photoId, size, blurPhotoData }: PhotoProps) => {
           }
           height={PHOTO_HEIGHT}
           loading="lazy"
-          placeholder="blur"
-          blurDataURL={blurPhotoData}
+          placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
           className="rounded-lg"
         />
         {isHovering && (

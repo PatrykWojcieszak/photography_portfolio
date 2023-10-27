@@ -6,7 +6,6 @@ export type Photo = {
   size: PhotoSize;
   photoId: string;
   alt: string;
-  blurPhotoData: string;
 };
 
 export enum PhotoSize {

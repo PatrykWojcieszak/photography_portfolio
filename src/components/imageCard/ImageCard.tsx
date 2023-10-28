@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ImageCardProps } from "./ImageCard.types";
 import Link from "next/link";
+import { shimmerLoader } from "@/utils/getShimmerLoader";
 
 const CARD_HEIGHT = 500;
 const CARD_WIDTH = 333;
@@ -18,6 +19,7 @@ export const ImageCard = ({
         <Image
           src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,h_500/${thumbnailId}.webp`}
           alt={alt}
+          placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
           height={CARD_HEIGHT}
           width={CARD_WIDTH}
           className="border border-white/50 rounded-lg cursor-pointer"

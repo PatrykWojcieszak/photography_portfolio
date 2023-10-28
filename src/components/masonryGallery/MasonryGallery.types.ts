@@ -3,9 +3,15 @@ export type MasonryGalleryProps = {
 };
 
 export type Photo = {
+  description: string;
   size: PhotoSize;
   photoId: string;
-  alt: string;
+  camera: string;
+  exposureTime: number;
+  fNumber: number;
+  focalLength: number;
+  iso: number;
+  lens: string;
 };
 
 export enum PhotoSize {

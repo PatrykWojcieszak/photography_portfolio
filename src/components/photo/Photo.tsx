@@ -40,7 +40,7 @@ export const Photo = (photoProps: PhotoProps) => {
           height={PHOTO_HEIGHT}
           loading="lazy"
           placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
-          className="rounded-lg"
+          className="border border-white/50 rounded-lg cursor-pointer"
         />
         {isHovering && (
           <PhotoDetails

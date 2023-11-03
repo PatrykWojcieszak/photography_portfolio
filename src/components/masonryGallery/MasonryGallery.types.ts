@@ -12,6 +12,8 @@ export type Photo = {
   focalLength: number;
   iso: number;
   lens: string;
+  width: number;
+  height: number;
 };
 
 export enum PhotoSize {

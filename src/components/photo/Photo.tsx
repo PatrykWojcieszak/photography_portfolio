@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { PhotoProps } from "./Photo.types";
-import { PhotoSize } from "../masonryGallery/MasonryGallery.types";
 import { useState } from "react";
 import { ExpandedPhoto } from "./expandedPhoto/ExpandedPhoto";
 import { PhotoDetails } from "./photoDetails/PhotoDetails";
@@ -26,7 +25,7 @@ export const Photo = (photoProps: PhotoProps) => {
         onMouseLeave={() => setIsHovering(false)}>
         <Image
           key={photoProps.photoId}
-          src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_720/${photoProps.photoId}.webp`}
+          src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_380/${photoProps.photoId}.webp`}
           alt={photoProps.description}
           width={photoProps.width}
           height={photoProps.height}

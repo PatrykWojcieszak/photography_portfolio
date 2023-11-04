@@ -26,7 +26,7 @@ export const Photo = (photoProps: PhotoProps) => {
         <Image
           unoptimized
           key={photoProps.photoId}
-          src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_380/${photoProps.photoId}.webp`}
+          src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_280/${photoProps.photoId}.webp`}
           alt={photoProps.description}
           width={photoProps.width}
           height={photoProps.height}

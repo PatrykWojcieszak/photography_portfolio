@@ -17,6 +17,7 @@ export const ImageCard = ({
     <Link href={`/${collectionName}${isGallery ? "/gallery" : ""}`}>
       <div className="relative transition ease-in-out duration-100 hover:brightness-125">
         <Image
+          unoptimized
           src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,h_500/${thumbnailId}.webp`}
           alt={alt}
           placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}

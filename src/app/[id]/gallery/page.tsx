@@ -6,8 +6,8 @@ import cloudinary from "@/utils/cloudinary";
 import { resizePhoto } from "@/utils/resizePhoto";
 
 const CLOUDINARY_IDS_CHUNK = 100;
-const PHOTO_HEIGHT = 500;
-const PHOTO_WIDTH = 335;
+const PHOTO_HEIGHT = 299;
+const PHOTO_WIDTH = 200;
 
 export async function generateStaticParams() {
   const collectionData = await getDocs(collection(firestore, "allPages"));

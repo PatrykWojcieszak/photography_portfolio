@@ -68,7 +68,12 @@ const getData = async (collectionName: string) => {
       [PHOTO_WIDTH, PHOTO_HEIGHT]
     );
 
-    return { ...photo, width: resizedPhoto[0], height: resizedPhoto[1] };
+    return {
+      ...photo,
+      width: resizedPhoto[0],
+      height: resizedPhoto[1],
+      createdAt: cloudinaryPhoto?.created_at ?? "",
+    };
   });
 };
 

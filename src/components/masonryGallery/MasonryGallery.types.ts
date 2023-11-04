@@ -14,6 +14,7 @@ export type Photo = {
   lens: string;
   width: number;
   height: number;
+  createdAt: string;
 };
 
 export enum PhotoSize {

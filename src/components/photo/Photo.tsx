@@ -24,6 +24,7 @@ export const Photo = (photoProps: PhotoProps) => {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}>
         <Image
+          unoptimized
           key={photoProps.photoId}
           src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_380/${photoProps.photoId}.webp`}
           alt={photoProps.description}

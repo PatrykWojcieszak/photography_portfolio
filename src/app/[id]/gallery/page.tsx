@@ -4,10 +4,7 @@ import { MasonryGallery } from "@/components/masonryGallery/MasonryGallery";
 import { Photo } from "@/components/masonryGallery/MasonryGallery.types";
 import cloudinary from "@/utils/cloudinary";
 import { resizePhoto } from "@/utils/resizePhoto";
-
-const CLOUDINARY_IDS_CHUNK = 100;
-const PHOTO_HEIGHT = 299;
-const PHOTO_WIDTH = 200;
+import { CLOUDINARY_IDS_CHUNK, PHOTO_WIDTH, PHOTO_HEIGHT } from "@/constants";
 
 export async function generateStaticParams() {
   const collectionData = await getDocs(collection(firestore, "allPages"));

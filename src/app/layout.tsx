@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="flex justify-center w-full">
-          <div className="flex flex-col h-full px-12 gap-5 max-w-[2580px] w-full">
+          <div className="flex flex-col h-full px-12 pb-2 gap-5 max-w-[2580px] w-full">
             <Header />
             {children}
           </div>

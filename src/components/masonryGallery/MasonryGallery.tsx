@@ -1,17 +1,40 @@
-import { MasonryGalleryProps } from "./MasonryGallery.types";
-import { Photo } from "../photo/Photo";
+"use client";
+
+import { MasonryGalleryProps, Photo } from "./MasonryGallery.types";
+import { Photo as PhotoComponent } from "../photo/Photo";
+import { useMeasure } from "react-use";
+import { useMemo } from "react";
+import { PHOTO_WIDTH } from "@/constants";
 
 export const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
+  const [ref, { width }] = useMeasure<HTMLDivElement>();
+
+  const photoColumns = useMemo(() => {
+    const numberOfColumns = Math.ceil(width / PHOTO_WIDTH);
+
+    return photos
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      .reduce<Record<string, Photo[]>>((photos, photo, index) => {
+        const columnIndex = index % numberOfColumns;
+
+        photos[columnIndex] = [...(photos[columnIndex] ?? []), photo];
+
+        return photos;
+      }, {});
+  }, [photos, width]);
+
   return (
-    <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 2xl:columns-7 3xl:columns-8 4xl:columns-9 5xl:columns-11 [&>div:not(:first-child)]:mt-5">
-      {photos
-        .sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        )
-        .map((photo) => (
-          <Photo key={photo.photoId} {...photo} />
-        ))}
+    <div ref={ref} className="flex gap-3 justify-between">
+      {Object.values(photoColumns).map((photos, index) => (
+        <div key={index} className="flex flex-col gap-3">
+          {photos.map((photo) => (
+            <PhotoComponent key={photo.photoId} {...photo} />
+          ))}
+        </div>
+      ))}
     </div>
   );
 };

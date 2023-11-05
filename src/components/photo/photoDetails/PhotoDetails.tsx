@@ -15,26 +15,31 @@ export const PhotoDetails = ({
     .filter(Boolean)
     .join(" | ");
 
+  const areAllDetailsHidden =
+    !description && !camera && !lens && !photoDetails.length;
+
   return (
     <>
       <div
         onClick={onExpandPhoto}
         className="rounded-lg absolute top-0 left-0 bg-black/80 w-full h-full cursor-pointer p-2">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           {description && <h4 className="text-white">{description}</h4>}
           {camera && <h5 className="text-gray text-xs">{camera}</h5>}
           {lens && <h5 className="text-gray text-xs">{lens}</h5>}
-          {photoDetails.length && (
+          {!!photoDetails.length && (
             <h5 className="text-gray text-xs">{photoDetails}</h5>
           )}
         </div>
       </div>
-      <Image
-        onClick={onExpandPhoto}
-        className="absolute cursor-pointer"
-        src={ExpandIcon}
-        alt="Expand Icon"
-      />
+      {areAllDetailsHidden && (
+        <Image
+          onClick={onExpandPhoto}
+          className="absolute cursor-pointer"
+          src={ExpandIcon}
+          alt="Expand Icon"
+        />
+      )}
     </>
   );
 };

@@ -2,9 +2,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "@/firebase/firebase";
 import { MasonryGallery } from "@/components/masonryGallery/MasonryGallery";
 import { Photo } from "@/components/masonryGallery/MasonryGallery.types";
-import cloudinary from "@/utils/cloudinary";
 import { resizePhoto } from "@/utils/resizePhoto";
-import { CLOUDINARY_IDS_CHUNK, PHOTO_WIDTH, PHOTO_HEIGHT } from "@/constants";
+import { PHOTO_WIDTH, PHOTO_HEIGHT } from "@/constants";
 
 export async function generateStaticParams() {
   const collectionData = await getDocs(collection(firestore, "allPages"));
@@ -35,33 +34,9 @@ const getData = async (collectionName: string) => {
     }
   });
 
-  const photoIds = result.map((photo) => photo.photoId);
-
-  const splittedUserIdChunks = Array(
-    Math.ceil(photoIds.length / CLOUDINARY_IDS_CHUNK)
-  )
-    .fill(0)
-    .map((_, index) =>
-      photoIds.slice(
-        index * CLOUDINARY_IDS_CHUNK,
-        index * CLOUDINARY_IDS_CHUNK + CLOUDINARY_IDS_CHUNK
-      )
-    );
-
-  const cloudinaryPhotoPromises = splittedUserIdChunks.map((idsChunk) =>
-    cloudinary.v2.api.resources_by_ids(idsChunk, {})
-  );
-
-  const cloudinaryPhotos = await Promise.all(cloudinaryPhotoPromises);
-
-  const cloudinaryResources = cloudinaryPhotos.flatMap((res) => res.resources);
-
   return result.map((photo) => {
-    const cloudinaryPhoto = cloudinaryResources.find(
-      (cdnPhoto) => cdnPhoto.public_id === photo.photoId
-    );
     const resizedPhoto = resizePhoto(
-      [cloudinaryPhoto?.width ?? 0, cloudinaryPhoto?.height ?? 0],
+      [photo.width, photo.height],
       [PHOTO_WIDTH, PHOTO_HEIGHT]
     );
 
@@ -69,7 +44,6 @@ const getData = async (collectionName: string) => {
       ...photo,
       width: resizedPhoto[0],
       height: resizedPhoto[1],
-      createdAt: cloudinaryPhoto?.created_at ?? "",
     };
   });
 };

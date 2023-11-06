@@ -1,17 +1,36 @@
+"use client";
+
+import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
-import InstagramIcon from "../../../public/instagramIcon.svg";
+import InstagramIcon from "public/instagramIcon.svg";
+import BackIcon from "public/backArrow.svg";
 import Link from "next/link";
 
-const ICON_SIZE = 32;
+const INSTAGRAM_ICON_SIZE = 32;
+const BACK_ICON_SIZE = 26;
 
 export const Header = () => {
+  const router = useRouter();
+  const location = usePathname();
+
   return (
     <div className="flex justify-between items-center h-16 pt-6 w-full">
-      <Link href="/">
-        <h1 className="text-white text-2xl cursor-pointer">
-          Patryk Wojcieszak
-        </h1>
-      </Link>
+      <div className="flex items-center gap-3">
+        {location !== "/" && (
+          <Image
+            onClick={() => router.back()}
+            src={BackIcon}
+            alt="Instagram Icon"
+            width={BACK_ICON_SIZE}
+            className="cursor-pointer rounded-full bg-white"
+          />
+        )}
+        <Link href="/">
+          <h1 className="text-white text-2xl cursor-pointer">
+            Patryk Wojcieszak
+          </h1>
+        </Link>
+      </div>
       <div className="flex gap-4">
         <Link
           href="https://www.instagram.com/p.w_shots"
@@ -20,7 +39,7 @@ export const Header = () => {
           <Image
             src={InstagramIcon}
             alt="Instagram Icon"
-            width={ICON_SIZE}
+            width={INSTAGRAM_ICON_SIZE}
             className="cursor-pointer"
           />
         </Link>
@@ -31,7 +50,7 @@ export const Header = () => {
           <Image
             src={InstagramIcon}
             alt="Instagram Icon"
-            width={ICON_SIZE}
+            width={INSTAGRAM_ICON_SIZE}
             className="cursor-pointer"
           />
         </Link>

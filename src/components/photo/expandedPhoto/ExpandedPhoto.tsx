@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ExpandedPhotoProps } from "./ExpandedPhoto.types";
 import { shimmerLoader } from "@/utils/getShimmerLoader";
 import { PhotoSize } from "@/components/masonryGallery/MasonryGallery.types";
+import { clsx } from "clsx";
 
 const VERTICAL_PHOTO_WIDTH = 720;
 const HORIZONTAL_PHOTO_WIDTH = 1920;
@@ -21,9 +22,10 @@ export const ExpandedPhoto = ({
 
   return (
     <div
-      className={`transition-opacity duration-[0.5s] fixed top-0 left-0 w-full h-full bg-black/90 z-40 !mt-0 p-16 cursor-pointer ${
+      className={clsx(
+        "transition-opacity duration-[0.5s] fixed top-0 left-0 w-full h-full bg-black/90 z-40 !mt-0 md:p-8 cursor-pointer",
         !isPhotoLoaded && "opacity-0"
-      }`}
+      )}
       onClick={closeExpandedMode}>
       <div className="relative w-full h-full flex items-start justify-center z-50">
         <Image

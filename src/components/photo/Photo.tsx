@@ -2,21 +2,29 @@
 
 import Image from "next/image";
 import { PhotoProps } from "./Photo.types";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ExpandedPhoto } from "./expandedPhoto/ExpandedPhoto";
 import { PhotoDetails } from "./photoDetails/PhotoDetails";
 import { shimmerLoader } from "@/utils/getShimmerLoader";
 import { Spinner } from "../spinner/Spinner";
+import { useGetScrollPosition } from "@/hooks/useGetScrollPosition";
 
 export const Photo = (photoProps: PhotoProps) => {
   const [isHovering, setIsHovering] = useState(false);
   const [isPhotoExpanded, setIsPhotoExpanded] = useState(false);
   const [isPhotoLoaded, setIsPhotoLoaded] = useState(false);
 
+  const { scrollPosition } = useGetScrollPosition();
+
+  const photoRef = useRef<HTMLDivElement>(null);
+
   const onCloseExpandedPhoto = () => {
     setIsPhotoExpanded(false);
     setIsPhotoLoaded(false);
   };
+
+  const positionY = photoRef.current?.offsetTop ?? 0;
+  const positionX = photoRef.current?.offsetLeft ?? 0;
 
   return (
     <div>
@@ -26,9 +34,13 @@ export const Photo = (photoProps: PhotoProps) => {
           isPhotoLoaded={isPhotoLoaded}
           onPhotoLoaded={setIsPhotoLoaded}
           closeExpandedMode={onCloseExpandedPhoto}
+          positionX={positionX}
+          positionY={positionY}
+          scrollPosition={scrollPosition}
         />
       )}
       <div
+        ref={photoRef}
         className="relative flex items-center justify-center"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}>

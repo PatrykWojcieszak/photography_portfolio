@@ -2,6 +2,19 @@ import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "@/firebase/firebase";
 import { PhotographyCollection } from "@/components/cardList/CardList.types";
 import { CardList } from "@/components/cardList/CardList";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  return {
+    title: (params.id.charAt(0).toUpperCase() + params.id.slice(1))
+      .replace(/([A-Z])/g, " $1")
+      .trim(),
+  };
+}
 
 export async function generateStaticParams() {
   const collectionData = await getDocs(collection(firestore, "homePage"));

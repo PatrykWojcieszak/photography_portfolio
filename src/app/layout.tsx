@@ -11,7 +11,10 @@ const inter = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Patryk Wojcieszak",
+  title: {
+    default: "Patryk Wojcieszak",
+    template: "%s - Patryk Wojcieszak",
+  },
   description: "Patryk Wojcieszak - Photography portfolio",
 };
 

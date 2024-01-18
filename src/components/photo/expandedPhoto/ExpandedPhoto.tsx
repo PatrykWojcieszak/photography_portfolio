@@ -3,11 +3,14 @@
 import Image from "next/image";
 import { ExpandedPhotoProps } from "./ExpandedPhoto.types";
 import { shimmerLoader } from "@/utils/getShimmerLoader";
-import { PhotoSize } from "@/components/masonryGallery/MasonryGallery.types";
+import {
+  Photo,
+  PhotoSize,
+} from "@/components/masonryGallery/MasonryGallery.types";
 import { clsx } from "clsx";
-import { useKeyPress, useWindowSize } from "react-use";
-import { useEffect, useState } from "react";
+import { useKeyPressEvent, useWindowSize } from "react-use";
 import { getExpandedPhotoUrl } from "@/utils/getExpandedPhotoUrl";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const VERTICAL_PHOTO_WIDTH = 720;
 const HORIZONTAL_PHOTO_WIDTH = 1920;
@@ -16,24 +19,24 @@ const HORIZONTAL_PHOTO_SCALE_PADDING = 0.4;
 
 export const ExpandedPhoto = ({
   closeExpandedMode,
-  photoId,
-  description,
   isPhotoLoaded,
   onPhotoLoaded,
-  size,
   positionX,
   positionY,
-  width,
-  height,
   scrollPosition,
   photos,
 }: ExpandedPhotoProps) => {
-  const [currentlyViewingPhoto, setCurrentlyViewingPhoto] = useState(photoId);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const photoId = searchParams.get("photo") ?? "";
 
   const { height: windowHeight, width: windowWidth } = useWindowSize();
 
-  const isArrowLeftPressed = useKeyPress("ArrowLeft");
-  const isArrowRightPressed = useKeyPress("ArrowRight");
+  const { width, height, size, description } = photos.find(
+    (photo) => photo.photoId === photoId
+  ) as Photo;
 
   const onLoadedImage = (image: HTMLImageElement) => {
     onPhotoLoaded(true);
@@ -59,23 +62,23 @@ export const ExpandedPhoto = ({
   };
 
   const currentPhotoIndexInArray = photos.findIndex(
-    (photo) => photo.photoId === currentlyViewingPhoto
+    (photo) => photo.photoId === photoId
   );
 
   const previousPhoto = photos?.[currentPhotoIndexInArray - 1];
   const nextPhoto = photos?.[currentPhotoIndexInArray + 1];
 
-  useEffect(() => {
-    if (isArrowLeftPressed[0] && previousPhoto) {
-      setCurrentlyViewingPhoto(previousPhoto.photoId);
-    }
-  }, [isArrowLeftPressed, previousPhoto]);
+  const changePhoto = (photoId: string) =>
+    router.replace(`${pathname}?photo=${photoId}`);
 
-  useEffect(() => {
-    if (isArrowRightPressed[0] && nextPhoto) {
-      setCurrentlyViewingPhoto(nextPhoto.photoId);
-    }
-  }, [isArrowRightPressed, nextPhoto]);
+  useKeyPressEvent(
+    "ArrowLeft",
+    () => previousPhoto && changePhoto(previousPhoto.photoId)
+  );
+  useKeyPressEvent(
+    "ArrowRight",
+    () => nextPhoto && changePhoto(nextPhoto.photoId)
+  );
 
   return (
     <div
@@ -94,7 +97,7 @@ export const ExpandedPhoto = ({
             left: positionX ?? 0,
           }}
           src={getExpandedPhotoUrl(
-            currentlyViewingPhoto,
+            photoId,
             size !== PhotoSize.VERTICAL
               ? HORIZONTAL_PHOTO_WIDTH
               : VERTICAL_PHOTO_WIDTH

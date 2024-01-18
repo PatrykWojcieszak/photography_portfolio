@@ -1,7 +1,7 @@
 import { ImageCard } from "../imageCard/ImageCard";
 import { CardListProps } from "./CardList.types";
 
-export const CardList = ({ cards }: CardListProps) => {
+export const CardList = ({ cards, categoryName }: CardListProps) => {
   return (
     <main className="flex-[2] py-6">
       <div className="flex items-center gap-12 justify-center flex-wrap h-full">
@@ -13,6 +13,7 @@ export const CardList = ({ cards }: CardListProps) => {
             title={card.name}
             collectionName={card.collectionName}
             isGallery={card.isGallery}
+            categoryName={categoryName}
           />
         ))}
       </div>

@@ -8,18 +8,25 @@ import { PhotoDetails } from "./photoDetails/PhotoDetails";
 import { shimmerLoader } from "@/utils/getShimmerLoader";
 import { Spinner } from "../spinner/Spinner";
 import { useGetScrollPosition } from "@/hooks/useGetScrollPosition";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export const Photo = (photoProps: PhotoProps) => {
-  const [isHovering, setIsHovering] = useState(false);
-  const [isPhotoExpanded, setIsPhotoExpanded] = useState(false);
-  const [isPhotoLoaded, setIsPhotoLoaded] = useState(false);
-
+export const Photo = ({ photo, photos }: PhotoProps) => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { scrollPosition } = useGetScrollPosition();
+
+  const photoId = searchParams.get("photo");
+
+  const [isHovering, setIsHovering] = useState(false);
+  const [isPhotoLoaded, setIsPhotoLoaded] = useState(false);
 
   const photoRef = useRef<HTMLDivElement>(null);
 
+  const isPhotoExpanded = photoId === photo.photoId;
+
   const onCloseExpandedPhoto = () => {
-    setIsPhotoExpanded(false);
+    router.replace(pathname);
     setIsPhotoLoaded(false);
   };
 
@@ -30,13 +37,14 @@ export const Photo = (photoProps: PhotoProps) => {
     <div>
       {isPhotoExpanded && (
         <ExpandedPhoto
-          {...photoProps}
+          {...photo}
           isPhotoLoaded={isPhotoLoaded}
           onPhotoLoaded={setIsPhotoLoaded}
           closeExpandedMode={onCloseExpandedPhoto}
           positionX={positionX}
           positionY={positionY}
           scrollPosition={scrollPosition}
+          photos={photos}
         />
       )}
       <div
@@ -46,11 +54,11 @@ export const Photo = (photoProps: PhotoProps) => {
         onMouseLeave={() => setIsHovering(false)}>
         <Image
           unoptimized
-          key={photoProps.photoId}
-          src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_280/${photoProps.photoId}.webp`}
-          alt={photoProps.description}
-          width={photoProps.width}
-          height={photoProps.height}
+          key={photo.photoId}
+          src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_scale,w_280/${photo.photoId}.webp`}
+          alt={photo.description}
+          width={photo.width}
+          height={photo.height}
           loading="lazy"
           placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
           className="border border-white/50 rounded-lg cursor-pointer"
@@ -58,8 +66,10 @@ export const Photo = (photoProps: PhotoProps) => {
         {isPhotoExpanded && !isPhotoLoaded && <Spinner />}
         {isHovering && (
           <PhotoDetails
-            photo={photoProps}
-            onExpandPhoto={() => setIsPhotoExpanded(true)}
+            photo={photo}
+            onExpandPhoto={() => {
+              router.replace(`${pathname}?photo=${photo.photoId}`);
+            }}
           />
         )}
       </div>

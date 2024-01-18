@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { ImageCardProps } from "./ImageCard.types";
 import Link from "next/link";
@@ -12,9 +14,10 @@ export const ImageCard = ({
   title,
   collectionName,
   isGallery,
+  categoryName,
 }: ImageCardProps) => {
   return (
-    <Link href={`/${collectionName}${isGallery ? "/gallery" : ""}`}>
+    <Link href={`/${categoryName ? categoryName + "/" : ""}${collectionName}`}>
       <div className="relative transition ease-in-out duration-100 hover:brightness-125">
         <Image
           unoptimized

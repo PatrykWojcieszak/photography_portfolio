@@ -5,6 +5,7 @@ export type ExpandedPhotoProps = Photo & {
   positionX?: number;
   positionY?: number;
   scrollPosition: number;
+  photos: Photo[];
   onPhotoLoaded: (isLoaded: boolean) => void;
   closeExpandedMode: () => void;
 };

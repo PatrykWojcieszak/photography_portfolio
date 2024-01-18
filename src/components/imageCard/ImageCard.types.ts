@@ -4,4 +4,5 @@ export type ImageCardProps = {
   title: string;
   collectionName: string;
   isGallery?: boolean;
+  categoryName?: string;
 };

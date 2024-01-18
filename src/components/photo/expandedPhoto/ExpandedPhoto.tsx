@@ -1,9 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import { ExpandedPhotoProps } from "./ExpandedPhoto.types";
 import { shimmerLoader } from "@/utils/getShimmerLoader";
 import { PhotoSize } from "@/components/masonryGallery/MasonryGallery.types";
 import { clsx } from "clsx";
-import { useWindowSize } from "react-use";
+import { useKeyPress, useWindowSize } from "react-use";
+import { useEffect, useState } from "react";
+import { getExpandedPhotoUrl } from "@/utils/getExpandedPhotoUrl";
 
 const VERTICAL_PHOTO_WIDTH = 720;
 const HORIZONTAL_PHOTO_WIDTH = 1920;
@@ -22,8 +26,14 @@ export const ExpandedPhoto = ({
   width,
   height,
   scrollPosition,
+  photos,
 }: ExpandedPhotoProps) => {
+  const [currentlyViewingPhoto, setCurrentlyViewingPhoto] = useState(photoId);
+
   const { height: windowHeight, width: windowWidth } = useWindowSize();
+
+  const isArrowLeftPressed = useKeyPress("ArrowLeft");
+  const isArrowRightPressed = useKeyPress("ArrowRight");
 
   const onLoadedImage = (image: HTMLImageElement) => {
     onPhotoLoaded(true);
@@ -48,6 +58,25 @@ export const ExpandedPhoto = ({
     );
   };
 
+  const currentPhotoIndexInArray = photos.findIndex(
+    (photo) => photo.photoId === currentlyViewingPhoto
+  );
+
+  const previousPhoto = photos?.[currentPhotoIndexInArray - 1];
+  const nextPhoto = photos?.[currentPhotoIndexInArray + 1];
+
+  useEffect(() => {
+    if (isArrowLeftPressed[0] && previousPhoto) {
+      setCurrentlyViewingPhoto(previousPhoto.photoId);
+    }
+  }, [isArrowLeftPressed, previousPhoto]);
+
+  useEffect(() => {
+    if (isArrowRightPressed[0] && nextPhoto) {
+      setCurrentlyViewingPhoto(nextPhoto.photoId);
+    }
+  }, [isArrowRightPressed, nextPhoto]);
+
   return (
     <div
       className={clsx(
@@ -64,13 +93,12 @@ export const ExpandedPhoto = ({
             top: (positionY ?? 0) - scrollPosition,
             left: positionX ?? 0,
           }}
-          src={`https://res.cloudinary.com/${
-            process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
-          }/image/upload/c_scale,w_${
+          src={getExpandedPhotoUrl(
+            currentlyViewingPhoto,
             size !== PhotoSize.VERTICAL
               ? HORIZONTAL_PHOTO_WIDTH
               : VERTICAL_PHOTO_WIDTH
-          }/${photoId}.webp`}
+          )}
           width={width}
           height={height}
           placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}

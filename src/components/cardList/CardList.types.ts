@@ -7,4 +7,5 @@ export type PhotographyCollection = {
 
 export type CardListProps = {
   cards: PhotographyCollection[];
+  categoryName?: string;
 };

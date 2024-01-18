@@ -1,6 +1,6 @@
 import { CardList } from "@/components/cardList/CardList";
 import { Metadata } from "next";
-import { fetchSubCategories } from "../api/actions/fetchSubCategories";
+import { fetchCategories } from "../api/actions/fetchCategories";
 
 const COLLECTION_NAME = "streetPhotography";
 
@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const getData = async () => {
-  return await fetchSubCategories(COLLECTION_NAME);
+  return await fetchCategories(COLLECTION_NAME);
 };
 
 export default async function Page() {

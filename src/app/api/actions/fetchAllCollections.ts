@@ -11,6 +11,6 @@ export const fetchAllCollections = async () => {
   });
 
   return result.map((collectionName) => ({
-    id: collectionName,
+    collectionName,
   }));
 };

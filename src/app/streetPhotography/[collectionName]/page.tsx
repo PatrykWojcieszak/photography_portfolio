@@ -2,7 +2,7 @@ import { MasonryGallery } from "@/components/masonryGallery/MasonryGallery";
 import { Metadata } from "next";
 import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
 import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
-import { fetchAllCollections } from "@/app/api/actions/fetchAllCollections";
+import { fetchCategories } from "@/app/api/actions/fetchCategories";
 
 export async function generateMetadata({
   params,
@@ -15,7 +15,11 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  return await fetchAllCollections();
+  const allCategories = await fetchCategories("streetPhotography");
+
+  return allCategories.map((category) => ({
+    collectionName: category.collectionName,
+  }));
 }
 
 const getData = async (collectionName: string) => {

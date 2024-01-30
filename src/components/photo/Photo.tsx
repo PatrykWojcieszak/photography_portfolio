@@ -2,22 +2,25 @@
 
 import Image from "next/image";
 import { PhotoProps } from "./Photo.types";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ExpandedPhoto } from "./expandedPhoto/ExpandedPhoto";
 import { PhotoDetails } from "./photoDetails/PhotoDetails";
 import { shimmerLoader } from "@/utils/getShimmerLoader";
 import { Spinner } from "../spinner/Spinner";
 import { useGetScrollPosition } from "@/hooks/useGetScrollPosition";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useScrollBlock } from "@/hooks/useDisableScroll";
+import Link from "next/link";
 
 export const Photo = ({ photo, photos }: PhotoProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { scrollPosition } = useGetScrollPosition();
+  const [block, allow] = useScrollBlock();
 
   const photoId = searchParams.get("photo");
-
+  console.log("scrollPosition", scrollPosition);
   const [isHovering, setIsHovering] = useState(false);
   const [isPhotoLoaded, setIsPhotoLoaded] = useState(false);
 
@@ -26,12 +29,20 @@ export const Photo = ({ photo, photos }: PhotoProps) => {
   const isPhotoExpanded = photoId === photo.photoId;
 
   const onCloseExpandedPhoto = () => {
-    router.replace(pathname);
+    router.replace(pathname, { scroll: false });
     setIsPhotoLoaded(false);
   };
 
   const positionY = photoRef.current?.offsetTop ?? 0;
   const positionX = photoRef.current?.offsetLeft ?? 0;
+
+  useEffect(() => {
+    if (isPhotoExpanded) {
+      block();
+    } else {
+      allow();
+    }
+  }, [allow, block, isPhotoExpanded]);
 
   return (
     <div>
@@ -65,12 +76,19 @@ export const Photo = ({ photo, photos }: PhotoProps) => {
         />
         {isPhotoExpanded && !isPhotoLoaded && <Spinner />}
         {isHovering && (
-          <PhotoDetails
-            photo={photo}
-            onExpandPhoto={() => {
-              router.replace(`${pathname}?photo=${photo.photoId}`);
-            }}
-          />
+          <Link
+            href={`${pathname}?photo=${photo.photoId}`}
+            replace
+            scroll={false}>
+            <PhotoDetails
+              photo={photo}
+              onExpandPhoto={() => {
+                // router.replace(`${pathname}?photo=${photo.photoId}`, {
+                //   scroll: false,
+                // });
+              }}
+            />
+          </Link>
         )}
       </div>
     </div>

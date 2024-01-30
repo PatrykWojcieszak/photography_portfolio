@@ -69,7 +69,7 @@ export const ExpandedPhoto = ({
   const nextPhoto = photos?.[currentPhotoIndexInArray + 1];
 
   const changePhoto = (photoId: string) =>
-    router.replace(`${pathname}?photo=${photoId}`);
+    router.replace(`${pathname}?photo=${photoId}`, { scroll: false });
 
   useKeyPressEvent(
     "ArrowLeft",

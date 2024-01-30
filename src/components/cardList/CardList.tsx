@@ -3,7 +3,7 @@ import { CardListProps } from "./CardList.types";
 
 export const CardList = ({ cards, categoryName }: CardListProps) => {
   return (
-    <main className="flex-[2] py-6">
+    <main className="flex-[2] py-6 overflow-hidden">
       <div className="flex items-center gap-12 justify-center flex-wrap h-full">
         {cards.map((card) => (
           <ImageCard

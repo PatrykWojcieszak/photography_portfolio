@@ -14,7 +14,7 @@ export const Header = () => {
   const location = usePathname();
 
   return (
-    <div className="sticky top-0 bg-black flex justify-between items-center h-20 w-full z-30">
+    <div className="sticky top-0 bg-black flex justify-between items-center h-20 w-full z-30 py-5">
       <div className="flex items-center gap-3">
         {location !== "/" && (
           <Image

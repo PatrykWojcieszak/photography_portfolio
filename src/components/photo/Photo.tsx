@@ -2,25 +2,23 @@
 
 import Image from "next/image";
 import { PhotoProps } from "./Photo.types";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ExpandedPhoto } from "./expandedPhoto/ExpandedPhoto";
 import { PhotoDetails } from "./photoDetails/PhotoDetails";
 import { shimmerLoader } from "@/utils/getShimmerLoader";
 import { Spinner } from "../spinner/Spinner";
-import { useGetScrollPosition } from "@/hooks/useGetScrollPosition";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useScrollBlock } from "@/hooks/useDisableScroll";
 import Link from "next/link";
+import { useScroll } from "react-use";
 
-export const Photo = ({ photo, photos }: PhotoProps) => {
+export const Photo = ({ photo, photos, masonryGalleryRef }: PhotoProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { scrollPosition } = useGetScrollPosition();
-  const [block, allow] = useScrollBlock();
+  const { y: scrollPosition } = useScroll(masonryGalleryRef);
 
   const photoId = searchParams.get("photo");
-  console.log("scrollPosition", scrollPosition);
+
   const [isHovering, setIsHovering] = useState(false);
   const [isPhotoLoaded, setIsPhotoLoaded] = useState(false);
 
@@ -35,14 +33,6 @@ export const Photo = ({ photo, photos }: PhotoProps) => {
 
   const positionY = photoRef.current?.offsetTop ?? 0;
   const positionX = photoRef.current?.offsetLeft ?? 0;
-
-  useEffect(() => {
-    if (isPhotoExpanded) {
-      block();
-    } else {
-      allow();
-    }
-  }, [allow, block, isPhotoExpanded]);
 
   return (
     <div>
@@ -80,14 +70,7 @@ export const Photo = ({ photo, photos }: PhotoProps) => {
             href={`${pathname}?photo=${photo.photoId}`}
             replace
             scroll={false}>
-            <PhotoDetails
-              photo={photo}
-              onExpandPhoto={() => {
-                // router.replace(`${pathname}?photo=${photo.photoId}`, {
-                //   scroll: false,
-                // });
-              }}
-            />
+            <PhotoDetails photo={photo} onExpandPhoto={() => {}} />
           </Link>
         )}
       </div>

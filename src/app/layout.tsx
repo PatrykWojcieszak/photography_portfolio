@@ -27,7 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="flex justify-center w-full">
-          <div className="flex flex-col px-12 pb-2 max-w-[2580px] w-full h-screen overflow-y-auto">
+          <div className="flex flex-col px-12 pb-2 max-w-[2580px] w-full">
             <Header />
             {children}
           </div>

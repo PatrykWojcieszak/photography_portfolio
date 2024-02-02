@@ -87,7 +87,12 @@ export const ExpandedPhoto = ({
         !isPhotoLoaded && "opacity-0"
       )}
       onClick={closeExpandedMode}>
-      <div className="relative w-full h-full flex items-start justify-center z-50">
+      <div
+        className="relative w-full h-full flex items-start justify-center z-50"
+        onKeyDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}>
         <Image
           unoptimized
           alt={description}

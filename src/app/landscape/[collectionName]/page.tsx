@@ -19,7 +19,7 @@ export async function generateMetadata({
     openGraph: {
       images: [
         {
-          url: `patrykwojcieszak.pl/api/og?photo=${searchParams.photo}`,
+          url: `https://photography-portfolio-sooty.vercel.app/api/og?photo=${searchParams.photo}`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",

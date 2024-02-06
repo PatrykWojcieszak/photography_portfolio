@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
 import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
 import { fetchCategories } from "@/app/api/actions/fetchCategories";
+import { headers } from "next/headers";
 
 export async function generateMetadata({
   params,
@@ -14,12 +15,15 @@ export async function generateMetadata({
     photo: string;
   };
 }): Promise<Metadata> {
+  const headersList = headers();
+  const pathname = headersList.get("x-invoke-path") || "";
+
   return {
     title: getPageTitleFromCollectionName(params.collectionName),
     openGraph: {
       images: [
         {
-          url: `https://photography-portfolio-sooty.vercel.app/api/og?photo=${searchParams.photo}`,
+          url: `${pathname.split("/")[0]}/og?photo=${searchParams.photo}`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",

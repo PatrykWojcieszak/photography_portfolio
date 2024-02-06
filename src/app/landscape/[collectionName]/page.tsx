@@ -23,7 +23,7 @@ export async function generateMetadata({
     openGraph: {
       images: [
         {
-          url: `${pathname.split("/")[0]}/og?photo=${searchParams.photo}`,
+          url: `${pathname.split("/")[0]}/api/og?photo=${searchParams.photo}`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",

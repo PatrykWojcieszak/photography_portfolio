@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { MasonryGallery } from "@/components/masonryGallery/MasonryGallery";
 import { Metadata } from "next";
 import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
@@ -6,11 +7,25 @@ import { fetchCategories } from "@/app/api/actions/fetchCategories";
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: { collectionName: string };
+  searchParams: {
+    photo: string;
+  };
 }): Promise<Metadata> {
   return {
     title: getPageTitleFromCollectionName(params.collectionName),
+    openGraph: {
+      images: [
+        {
+          url: `patrykwojcieszak.pl/api/og?photo=${searchParams.photo}`,
+          width: 1200,
+          height: 630,
+          alt: "photo thumbnail",
+        },
+      ],
+    },
   };
 }
 

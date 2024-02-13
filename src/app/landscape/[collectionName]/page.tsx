@@ -5,6 +5,7 @@ import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
 import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
 import { fetchCategories } from "@/app/api/actions/fetchCategories";
 import { headers } from "next/headers";
+import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
 
 export async function generateMetadata({
   params,
@@ -52,5 +53,9 @@ export default async function Page({
 }) {
   const photos = await getData(params.collectionName);
 
-  return <MasonryGallery photos={photos} />;
+  return (
+    <GalleryContextController>
+      <MasonryGallery photos={photos} />
+    </GalleryContextController>
+  );
 }

@@ -18,17 +18,16 @@ const HORIZONTAL_PHOTO_SCALE_PADDING = 0.4;
 
 export const GalleryExpandedPhoto = ({
   photoId,
+  photos: allPhotos,
 }: GalleryExpandedPhotoProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const { height: windowHeight, width: windowWidth } = useWindowSize();
   const {
-    selectedPhotoId,
     photoPosition,
     isPhotoLoaded,
     setIsPhotoLoaded,
     scrollPosition,
-    allPhotos,
     resetPhotoDetails,
     setPhotoDetails,
   } = useGalleryContextState();
@@ -58,10 +57,10 @@ export const GalleryExpandedPhoto = ({
   }, [nextPhoto, router]);
 
   const changePhoto = (photoId: string) => {
-    router.replace(`/cars/${photoId}`, { scroll: false });
+    router.replace(`${pathname}?photo=${photoId}`, { scroll: false });
     setPhotoDetails({
       photoId,
-      photoPosition: undefined,
+      photoPosition,
     });
   };
 
@@ -77,12 +76,16 @@ export const GalleryExpandedPhoto = ({
     }
   });
 
-  if (!selectedPhotoId) {
+  useKeyPressEvent("Escape", () => {
+    handleCloseExpandedMode();
+  });
+
+  if (!photoId) {
     return null;
   }
 
   const { width, height, size, description } = allPhotos?.find(
-    (photo) => photo.photoId === selectedPhotoId
+    (photo) => photo.photoId === photoId
   ) as Photo;
 
   const photoCenterXPosition =
@@ -99,9 +102,6 @@ export const GalleryExpandedPhoto = ({
       ? VERTICAL_PHOTO_SCALE_PADDING
       : HORIZONTAL_PHOTO_SCALE_PADDING);
 
-  const maxPhotoHeight = height * maxScale;
-  const maxPhotoWidth = width * maxScale;
-
   const onLoadedImage = (image: HTMLImageElement) => {
     setIsPhotoLoaded(true);
 
@@ -111,6 +111,8 @@ export const GalleryExpandedPhoto = ({
         "transform",
         `translate(${photoCenterXPosition}px, ${photoCenterYPosition}px) scale(${maxScale})`
       );
+    } else {
+      image.style.setProperty("transform", `scale(${maxScale})`);
     }
   };
 
@@ -122,7 +124,7 @@ export const GalleryExpandedPhoto = ({
       )}
       onClick={handleCloseExpandedMode}>
       <div
-        className="relative w-full h-full flex items-start justify-center z-50"
+        className="relative w-full h-full flex justify-center z-50"
         onKeyDown={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -133,12 +135,8 @@ export const GalleryExpandedPhoto = ({
           style={{
             transform: "translate3d(0, 0, 0)",
             objectFit: "contain",
-            top: photoPosition
-              ? photoPosition.y - scrollPosition
-              : (windowHeight - maxPhotoHeight) / 2,
-            left: photoPosition
-              ? photoPosition.x
-              : (windowWidth - maxPhotoWidth) / 2,
+            top: (photoPosition?.y ?? 0) - scrollPosition,
+            left: photoPosition?.x ?? 0,
           }}
           src={getExpandedPhotoUrl(
             photoId,
@@ -146,12 +144,12 @@ export const GalleryExpandedPhoto = ({
               ? HORIZONTAL_PHOTO_WIDTH
               : VERTICAL_PHOTO_WIDTH
           )}
-          width={photoPosition ? width : maxPhotoWidth}
-          height={photoPosition ? height : maxPhotoHeight}
+          width={width}
+          height={height}
           placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
           className={clsx(
-            "fixed rounded-lg transition-all duration-[0.7s]",
-            photoPosition && "opacity-0"
+            "rounded-lg transition-all duration-[0.7s]",
+            photoPosition ? "fixed opacity-0" : "relative"
           )}
           onLoadingComplete={onLoadedImage}
           priority

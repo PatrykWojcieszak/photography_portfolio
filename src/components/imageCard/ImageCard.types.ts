@@ -3,6 +3,5 @@ export type ImageCardProps = {
   alt: string;
   title: string;
   collectionName: string;
-  isGallery?: boolean;
   categoryName?: string;
 };

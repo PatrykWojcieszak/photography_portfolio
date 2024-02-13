@@ -13,7 +13,6 @@ export const ImageCard = ({
   alt,
   title,
   collectionName,
-  isGallery,
   categoryName,
 }: ImageCardProps) => {
   return (

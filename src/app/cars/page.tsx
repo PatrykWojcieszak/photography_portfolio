@@ -1,6 +1,7 @@
 import { MasonryGallery } from "@/components/masonryGallery/MasonryGallery";
 import { Metadata } from "next";
 import { fetchImageGallery } from "../api/actions/fetchImageGallery";
+import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
 
 const COLLECTION_NAME = "cars";
 
@@ -18,8 +19,8 @@ export default async function Page() {
   const photos = await getData();
 
   return (
-    <div>
+    <GalleryContextController>
       <MasonryGallery photos={photos} />
-    </div>
+    </GalleryContextController>
   );
 }

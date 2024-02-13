@@ -9,9 +9,11 @@ import { Spinner } from "../spinner/Spinner";
 import { useScroll } from "react-use";
 import { useGalleryContextState } from "@/hooks/useGalleryContextState";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export const Photo = ({ photo, masonryGalleryRef }: PhotoProps) => {
   const { y: scrollPosition } = useScroll(masonryGalleryRef);
+  const pathname = usePathname();
   const { setPhotoDetails, isPhotoLoaded, setScrollPosition, selectedPhotoId } =
     useGalleryContextState();
 
@@ -35,8 +37,8 @@ export const Photo = ({ photo, masonryGalleryRef }: PhotoProps) => {
 
   return (
     <Link
-      href={`/?photo=${photo.photoId}`}
-      as={`/cars/${photo.photoId}`}
+      href={`${pathname}?photo=${photo.photoId}`}
+      // as={`${pathname}/${photo.photoId}`}
       shallow>
       <div
         ref={photoRef}

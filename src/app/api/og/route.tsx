@@ -16,9 +16,9 @@ export async function GET(request: Request) {
       (
         <div tw="flex flex-col w-full h-full items-center justify-center bg-black">
           <img
-            width={800}
+            width={1200}
             height={630}
-            src={`https://res.cloudinary.com/dn8n473ye/image/upload/c_scale,w_720/${photo}.jpg`}
+            src={`https://res.cloudinary.com/dn8n473ye/image/upload/w_1200,h-630,crop=fit/${photo}.jpg`}
           />
         </div>
       )

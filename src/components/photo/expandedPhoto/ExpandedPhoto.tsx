@@ -110,7 +110,7 @@ export const ExpandedPhoto = ({
           width={width}
           height={height}
           placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
-          className="fixed transition-all opacity-0 duration-[1s] rounded-lg"
+          className="fixed transition-all opacity-0 duration-[0.7s] rounded-lg"
           onLoadingComplete={onLoadedImage}
           loading="lazy"
         />

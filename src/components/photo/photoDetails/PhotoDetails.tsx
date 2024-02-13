@@ -1,5 +1,5 @@
 import Image from "next/image";
-import ExpandIcon from "public/expandIcon.svg";
+import ExpandIcon from "../../../../public/expandIcon.svg";
 import { PhotoDetailsProps } from "./PhotoDetails.types";
 
 export const PhotoDetails = ({

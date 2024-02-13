@@ -2,13 +2,17 @@
 
 import { MasonryGalleryProps, Photo } from "./MasonryGallery.types";
 import { Photo as PhotoComponent } from "../photo/Photo";
-import { useMeasure, useWindowSize } from "react-use";
-import { useMemo, useRef } from "react";
+import { useMeasure } from "react-use";
+import { useEffect, useMemo, useRef } from "react";
 import { PHOTO_WIDTH } from "@/constants";
+import { useGalleryContextState } from "@/hooks/useGalleryContextState";
 
 export const MasonryGallery = ({ photos: allPhotos }: MasonryGalleryProps) => {
   const [ref, { width }] = useMeasure<HTMLDivElement>();
   const masonryGalleryRef = useRef<HTMLDivElement>(null);
+  const { setAllPhotos } = useGalleryContextState();
+
+  useEffect(() => setAllPhotos(allPhotos), [allPhotos, setAllPhotos]);
 
   const photoColumns = useMemo(() => {
     const numberOfColumns = Math.ceil(width / PHOTO_WIDTH);

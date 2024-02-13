@@ -2,9 +2,9 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
-import InstagramIcon from "public/instagramIcon.svg";
-import BackIcon from "public/backArrow.svg";
 import Link from "next/link";
+import BackIcon from "../../../public/backArrow.svg";
+import InstagramIcon from "../../../public/instagramIcon.svg";
 
 const INSTAGRAM_ICON_SIZE = 32;
 const BACK_ICON_SIZE = 26;

@@ -17,5 +17,9 @@ const getData = async () => {
 export default async function Page() {
   const photos = await getData();
 
-  return <MasonryGallery photos={photos} />;
+  return (
+    <div>
+      <MasonryGallery photos={photos} />
+    </div>
+  );
 }

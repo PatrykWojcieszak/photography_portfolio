@@ -43,7 +43,13 @@ export async function generateStaticParams() {
 }
 
 const getData = async (collectionName: string) => {
-  return await fetchImageGallery(collectionName);
+  const photos = await fetchImageGallery(collectionName);
+
+  if (!photos.length) {
+    return notFound();
+  }
+
+  return photos;
 };
 
 export default async function Page({

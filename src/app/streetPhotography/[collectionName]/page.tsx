@@ -5,6 +5,7 @@ import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollecti
 import { fetchCategories } from "@/app/api/actions/fetchCategories";
 import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({
   params,
@@ -42,7 +43,13 @@ export async function generateStaticParams() {
 }
 
 const getData = async (collectionName: string) => {
-  return await fetchImageGallery(collectionName);
+  const photos = await fetchImageGallery(collectionName);
+
+  if (!photos.length) {
+    return notFound();
+  }
+
+  return photos;
 };
 
 export default async function Page({

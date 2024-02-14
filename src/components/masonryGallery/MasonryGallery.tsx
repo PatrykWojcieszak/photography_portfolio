@@ -6,7 +6,7 @@ import { useMeasure } from "react-use";
 import { useMemo, useRef } from "react";
 import { PHOTO_WIDTH } from "@/constants";
 import { GalleryExpandedPhoto } from "../galleryExpandedPhoto/GalleryExpandedPhoto";
-import { useSearchParams } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 
 export const MasonryGallery = ({ photos: allPhotos }: MasonryGalleryProps) => {
   const [ref, { width }] = useMeasure<HTMLDivElement>();
@@ -30,6 +30,10 @@ export const MasonryGallery = ({ photos: allPhotos }: MasonryGalleryProps) => {
         return photos;
       }, {});
   }, [allPhotos, width]);
+
+  if (photoId && !allPhotos.some((photo) => photo.photoId === photoId)) {
+    return notFound();
+  }
 
   return (
     <div

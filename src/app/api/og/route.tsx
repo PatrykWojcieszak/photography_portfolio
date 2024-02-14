@@ -18,7 +18,7 @@ export async function GET(request: Request) {
           <img
             width={1200}
             height={630}
-            src={`https://res.cloudinary.com/dn8n473ye/image/upload/w_1200,h-630,crop=fit/${photo}.jpg`}
+            src={`https://res.cloudinary.com/dn8n473ye/image/upload/w_1200,h_630,c_fill/${photo}.jpg`}
           />
         </div>
       )

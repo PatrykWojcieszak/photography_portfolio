@@ -30,7 +30,7 @@ export async function generateMetadata({
       images: [
         {
           url: `${pathname.split("/")[0]}/api/og?photo=${
-            searchParams.photo ?? categoryPhoto
+            searchParams.photo ?? "zwo00wsjdykjjn4kdoxp"
           }`,
           width: 1200,
           height: 630,

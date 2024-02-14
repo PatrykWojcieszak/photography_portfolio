@@ -8,17 +8,15 @@ import { fetchCategories } from "../api/actions/fetchCategories";
 const COLLECTION_NAME = "cars";
 
 export async function generateMetadata({
-  params,
   searchParams,
 }: {
-  params: { collectionName: string };
   searchParams: {
     photo: string;
   };
 }): Promise<Metadata> {
   const categories = await fetchCategories("homePage");
   const categoryPhoto = categories.find(
-    (category) => category.collectionName === params.collectionName
+    (category) => category.collectionName === COLLECTION_NAME
   )?.thumbnailId;
 
   const headersList = headers();
@@ -29,7 +27,9 @@ export async function generateMetadata({
     openGraph: {
       images: [
         {
-          url: `${pathname.split("/")[0]}/api/og?photo=zwo00wsjdykjjn4kdoxp`,
+          url: `${pathname.split("/")[0]}/api/og?photo=${
+            searchParams.photo ?? categoryPhoto
+          }`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",

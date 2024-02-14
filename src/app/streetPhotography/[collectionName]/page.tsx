@@ -7,6 +7,8 @@ import { GalleryContextController } from "@/providers/gallery/galleryContextCont
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 
+const COLLECTION_NAME = "streetPhotography";
+
 export async function generateMetadata({
   params,
   searchParams,
@@ -16,7 +18,7 @@ export async function generateMetadata({
     photo: string;
   };
 }): Promise<Metadata> {
-  const categories = await fetchCategories("homePage");
+  const categories = await fetchCategories(COLLECTION_NAME);
   const categoryPhoto = categories.find(
     (category) => category.collectionName === params.collectionName
   )?.thumbnailId;
@@ -42,7 +44,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const allCategories = await fetchCategories("streetPhotography");
+  const allCategories = await fetchCategories(COLLECTION_NAME);
 
   return allCategories.map((category) => ({
     collectionName: category.collectionName,

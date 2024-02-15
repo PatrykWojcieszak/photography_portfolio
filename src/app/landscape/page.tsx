@@ -4,7 +4,7 @@ import { fetchCategories } from "../api/actions/fetchCategories";
 
 const COLLECTION_NAME = "landscape";
 
-export async function generateMetadata(): Promise<Metadata> {
+export function generateMetadata(): Metadata {
   return {
     title: COLLECTION_NAME,
   };

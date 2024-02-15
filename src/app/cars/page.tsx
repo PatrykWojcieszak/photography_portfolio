@@ -4,6 +4,7 @@ import { fetchImageGallery } from "../api/actions/fetchImageGallery";
 import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
 import { headers } from "next/headers";
 import { fetchCategories } from "../api/actions/fetchCategories";
+import { Suspense } from "react";
 
 const COLLECTION_NAME = "cars";
 
@@ -23,13 +24,12 @@ export async function generateMetadata({
   const pathname = headersList.get("x-invoke-path") || "";
 
   return {
+    metadataBase: new URL(pathname.split("/")[0]),
     title: COLLECTION_NAME,
     openGraph: {
       images: [
         {
-          url: `${pathname.split("/")[0]}/api/og?photo=${
-            searchParams.photo ?? categoryPhoto
-          }`,
+          url: `/api/og?photo=${searchParams.photo ?? categoryPhoto}`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",
@@ -48,7 +48,9 @@ export default async function Page() {
 
   return (
     <GalleryContextController>
-      <MasonryGallery photos={photos} />
+      <Suspense>
+        <MasonryGallery photos={photos} />
+      </Suspense>
     </GalleryContextController>
   );
 }

@@ -6,6 +6,7 @@ import { fetchCategories } from "@/app/api/actions/fetchCategories";
 import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 const COLLECTION_NAME = "streetPhotography";
 
@@ -27,13 +28,12 @@ export async function generateMetadata({
   const pathname = headersList.get("x-invoke-path") || "";
 
   return {
+    metadataBase: new URL(pathname.split("/")[0]),
     title: getPageTitleFromCollectionName(params.collectionName),
     openGraph: {
       images: [
         {
-          url: `${pathname.split("/")[0]}/api/og?photo=${
-            searchParams.photo ?? categoryPhoto
-          }`,
+          url: `/api/og?photo=${searchParams.photo ?? categoryPhoto}`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",
@@ -70,7 +70,9 @@ export default async function Page({
 
   return (
     <GalleryContextController>
-      <MasonryGallery photos={photos} />
+      <Suspense>
+        <MasonryGallery photos={photos} />
+      </Suspense>
     </GalleryContextController>
   );
 }

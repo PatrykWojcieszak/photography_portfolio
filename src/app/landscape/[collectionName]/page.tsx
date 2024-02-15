@@ -1,12 +1,11 @@
-// @ts-nocheck
 import { MasonryGallery } from "@/components/masonryGallery/MasonryGallery";
 import { Metadata } from "next";
 import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
 import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
 import { fetchCategories } from "@/app/api/actions/fetchCategories";
-import { headers } from "next/headers";
 import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 const COLLECTION_NAME = "landscape";
 
@@ -24,11 +23,7 @@ export async function generateMetadata({
     (category) => category.collectionName === params.collectionName
   )?.thumbnailId;
 
-  const headersList = headers();
-  const pathname = headersList.get("x-invoke-path") || "";
-
   return {
-    metadataBase: new URL(pathname.split("/")[0]),
     title: getPageTitleFromCollectionName(params.collectionName),
     openGraph: {
       images: [

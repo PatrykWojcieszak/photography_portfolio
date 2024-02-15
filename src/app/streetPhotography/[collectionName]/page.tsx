@@ -4,7 +4,6 @@ import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
 import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
 import { fetchCategories } from "@/app/api/actions/fetchCategories";
 import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -24,11 +23,7 @@ export async function generateMetadata({
     (category) => category.collectionName === params.collectionName
   )?.thumbnailId;
 
-  const headersList = headers();
-  const pathname = headersList.get("x-invoke-path") || "";
-
   return {
-    metadataBase: new URL(pathname.split("/")[0]),
     title: getPageTitleFromCollectionName(params.collectionName),
     openGraph: {
       images: [

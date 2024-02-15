@@ -2,7 +2,6 @@ import { MasonryGallery } from "@/components/masonryGallery/MasonryGallery";
 import { Metadata } from "next";
 import { fetchImageGallery } from "../api/actions/fetchImageGallery";
 import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
-import { headers } from "next/headers";
 import { fetchCategories } from "../api/actions/fetchCategories";
 import { Suspense } from "react";
 
@@ -20,11 +19,7 @@ export async function generateMetadata({
     (category) => category.collectionName === COLLECTION_NAME
   )?.thumbnailId;
 
-  const headersList = headers();
-  const pathname = headersList.get("x-invoke-path") || "";
-
   return {
-    metadataBase: new URL(pathname.split("/")[0]),
     title: COLLECTION_NAME,
     openGraph: {
       images: [

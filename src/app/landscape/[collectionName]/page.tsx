@@ -18,17 +18,12 @@ export async function generateMetadata({
     photo: string;
   };
 }): Promise<Metadata> {
-  const categories = await fetchCategories(COLLECTION_NAME);
-  const categoryPhoto = categories.find(
-    (category) => category.collectionName === params.collectionName
-  )?.thumbnailId;
-
   return {
     title: getPageTitleFromCollectionName(params.collectionName),
     openGraph: {
       images: [
         {
-          url: `/api/og?photo=${searchParams.photo ?? categoryPhoto}`,
+          url: `/api/og?photo=${searchParams.photo}`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",

@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 
 const COLLECTION_NAME = "landscape";
 
-export async function generateMetadata({
+export function generateMetadata({
   params,
   searchParams,
 }: {
@@ -17,7 +17,7 @@ export async function generateMetadata({
   searchParams: {
     photo: string;
   };
-}): Promise<Metadata> {
+}): Metadata {
   return {
     title: getPageTitleFromCollectionName(params.collectionName),
     openGraph: {

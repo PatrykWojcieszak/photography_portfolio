@@ -9,30 +9,6 @@ import { notFound } from "next/navigation";
 
 const COLLECTION_NAME = "landscape";
 
-export function generateMetadata({
-  params,
-  searchParams,
-}: {
-  params: { collectionName: string };
-  searchParams: {
-    photo: string;
-  };
-}): Metadata {
-  return {
-    title: getPageTitleFromCollectionName(params.collectionName),
-    openGraph: {
-      images: [
-        {
-          url: `/api/og?photo=${searchParams.photo}`,
-          width: 1200,
-          height: 630,
-          alt: "photo thumbnail",
-        },
-      ],
-    },
-  };
-}
-
 export async function generateStaticParams() {
   const allCategories = await fetchCategories(COLLECTION_NAME);
 

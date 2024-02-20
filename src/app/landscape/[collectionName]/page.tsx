@@ -9,6 +9,19 @@ import { notFound } from "next/navigation";
 
 const COLLECTION_NAME = "landscape";
 
+export function generateMetadata({
+  params,
+}: {
+  params: { collectionName: string };
+  searchParams: {
+    photo: string;
+  };
+}): Metadata {
+  return {
+    title: getPageTitleFromCollectionName(params.collectionName),
+  };
+}
+
 export async function generateStaticParams() {
   const allCategories = await fetchCategories(COLLECTION_NAME);
 

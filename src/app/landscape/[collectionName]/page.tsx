@@ -19,6 +19,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   return {
     title: getPageTitleFromCollectionName(params.collectionName),
+    metadataBase: new URL("https://photography-portfolio-sooty.vercel.app/"),
   };
 }
 

@@ -5,13 +5,6 @@ import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
 export const runtime = "edge";
-export const alt = "Gallery photo";
-export const size = {
-  width: 1200,
-  height: 630,
-};
-
-export const contentType = "image/png";
 
 export async function GET(request: NextRequest) {
   try {

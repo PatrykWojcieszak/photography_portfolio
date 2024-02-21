@@ -9,16 +9,32 @@ import { notFound } from "next/navigation";
 
 const COLLECTION_NAME = "landscape";
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: { collectionName: string };
   searchParams: {
     photo: string;
   };
-}): Metadata {
+}): Promise<Metadata> {
+  const categories = await fetchCategories(COLLECTION_NAME);
+  const categoryPhoto = categories.find(
+    (category) => category.collectionName === params.collectionName
+  )?.thumbnailId;
+
   return {
     title: getPageTitleFromCollectionName(params.collectionName),
+    openGraph: {
+      images: [
+        {
+          url: `/api/og?photo=${categoryPhoto}`,
+          width: 1200,
+          height: 630,
+          alt: "photo thumbnail",
+        },
+      ],
+    },
   };
 }
 

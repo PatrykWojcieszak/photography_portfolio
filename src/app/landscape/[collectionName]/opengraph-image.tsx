@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+import { fetchCategories } from "@/app/api/actions/fetchCategories";
 import { ImageResponse } from "next/og";
 
 // Route segment config
@@ -11,9 +13,22 @@ export const size = {
 };
 
 export const contentType = "image/png";
-
+const COLLECTION_NAME = "landscape";
 // Image generation
-export default async function Image() {
+export default async function Image({
+  params,
+  searchParams,
+}: {
+  params: { collectionName: string };
+  searchParams: {
+    photo: string;
+  };
+}) {
+  const categories = await fetchCategories(COLLECTION_NAME);
+  const categoryPhoto = categories.find(
+    (category) => category.collectionName === params.collectionName
+  )?.thumbnailId;
+
   return new ImageResponse(
     (
       // ImageResponse JSX element
@@ -27,6 +42,12 @@ export default async function Image() {
           alignItems: "center",
           justifyContent: "center",
         }}>
+        <img
+          alt="gallery photo thumbnail"
+          src={`https://res.cloudinary.com/dn8n473ye/image/upload/w_1200,h_630,c_fill/${
+            searchParams.photo ?? categoryPhoto
+          }.jpg`}
+        />
         About Acme
       </div>
     ),

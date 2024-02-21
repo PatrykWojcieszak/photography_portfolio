@@ -2,15 +2,21 @@
 /* eslint-disable jsx-a11y/alt-text */
 
 import { ImageResponse } from "next/og";
+import { NextRequest } from "next/server";
 
 export const runtime = "edge";
+export const alt = "Gallery photo";
+export const size = {
+  width: 1200,
+  height: 630,
+};
 
-export async function GET(request: Request) {
+export const contentType = "image/png";
+
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-
-    const hasTitle = searchParams.has("photo");
-    const photo = hasTitle ? searchParams.get("photo") : "";
+    const photo = searchParams.get("photo");
 
     return new ImageResponse(
       (

@@ -28,7 +28,7 @@ export async function generateMetadata({
     openGraph: {
       images: [
         {
-          url: `/api/og?photo=${categoryPhoto}`,
+          url: `/api/og?photo=${searchParams.photo ?? categoryPhoto}`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",

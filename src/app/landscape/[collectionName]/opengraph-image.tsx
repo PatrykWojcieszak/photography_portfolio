@@ -48,7 +48,7 @@ export default async function Image({
             searchParams.photo ?? categoryPhoto
           }.jpg`}
         />
-        About Acme
+        test
       </div>
     ),
     // ImageResponse options

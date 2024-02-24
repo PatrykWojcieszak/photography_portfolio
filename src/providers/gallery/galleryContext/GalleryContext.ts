@@ -4,6 +4,8 @@ import { GalleryContext } from "./GalleryContext.types";
 export const GalleryStateContext = createContext<GalleryContext>({
   isPhotoLoaded: false,
   scrollPosition: 0,
+  allPhotos: [],
+  setAllPhotos: () => {},
   resetPhotoDetails: () => {},
   setPhotoDetails: () => {},
   setIsPhotoLoaded: () => {},

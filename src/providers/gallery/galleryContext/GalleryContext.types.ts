@@ -5,6 +5,8 @@ export type GalleryContext = {
   photoPosition?: PhotoPosition;
   isPhotoLoaded: boolean;
   scrollPosition: number;
+  allPhotos: Photo[];
+  setAllPhotos: (photos: Photo[]) => void;
   setScrollPosition: (yPosition: number) => void;
   setIsPhotoLoaded: (isLoaded: boolean) => void;
   setPhotoDetails: (photoDetails: PhotoDetails) => void;

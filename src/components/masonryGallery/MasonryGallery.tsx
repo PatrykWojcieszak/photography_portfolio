@@ -3,16 +3,20 @@
 import { MasonryGalleryProps, Photo } from "./MasonryGallery.types";
 import { Photo as PhotoComponent } from "../photo/Photo";
 import { useMeasure } from "react-use";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { PHOTO_WIDTH } from "@/constants";
 import { GalleryExpandedPhoto } from "../galleryExpandedPhoto/GalleryExpandedPhoto";
 import { notFound, useSearchParams } from "next/navigation";
+import { useGalleryContextState } from "@/hooks/useGalleryContextState";
 
 export const MasonryGallery = ({ photos: allPhotos }: MasonryGalleryProps) => {
   const [ref, { width }] = useMeasure<HTMLDivElement>();
   const masonryGalleryRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
+  const { setAllPhotos } = useGalleryContextState();
   const photoId = searchParams.get("photo") ?? "";
+
+  useEffect(() => setAllPhotos(allPhotos), [allPhotos, setAllPhotos]);
 
   const photoColumns = useMemo(() => {
     const numberOfColumns = Math.ceil(width / PHOTO_WIDTH);
@@ -40,7 +44,7 @@ export const MasonryGallery = ({ photos: allPhotos }: MasonryGalleryProps) => {
       ref={masonryGalleryRef}
       style={{ height: `calc(100vh - 100px)` }}
       className="overflow-y-auto scrollbar-thin">
-      {photoId && <GalleryExpandedPhoto photoId={photoId} photos={allPhotos} />}
+      {/* {photoId && <GalleryExpandedPhoto photoId={photoId} />} */}
       <div ref={ref} className="flex gap-3 justify-between">
         {Object.values(photoColumns).map((photos, index) => (
           <div key={index} className="flex flex-col gap-3">

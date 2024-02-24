@@ -4,7 +4,7 @@ import { useGalleryContextState } from "@/hooks/useGalleryContextState";
 import { GalleryExpandedPhotoProps } from "./GalleryExpandedPhoto.types";
 import { getExpandedPhotoUrl } from "@/utils/getExpandedPhotoUrl";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
 import { shimmerLoader } from "@/utils/getShimmerLoader";
 import { Photo, PhotoSize } from "../masonryGallery/MasonryGallery.types";
@@ -18,10 +18,9 @@ const HORIZONTAL_PHOTO_SCALE_PADDING = 0.4;
 
 export const GalleryExpandedPhoto = ({
   photoId,
-  photos: allPhotos,
+  allPhotos,
 }: GalleryExpandedPhotoProps) => {
   const router = useRouter();
-  const pathname = usePathname();
   const { height: windowHeight, width: windowWidth } = useWindowSize();
   const {
     photoPosition,
@@ -57,10 +56,10 @@ export const GalleryExpandedPhoto = ({
   }, [nextPhoto, router]);
 
   const changePhoto = (photoId: string) => {
-    router.replace(`${pathname}?photo=${photoId}`, { scroll: false });
+    router.replace(`/cars/${photoId}`, { scroll: false });
     setPhotoDetails({
       photoId,
-      photoPosition,
+      photoPosition: undefined,
     });
   };
 
@@ -84,9 +83,8 @@ export const GalleryExpandedPhoto = ({
     return null;
   }
 
-  const { width, height, size, description } = allPhotos?.find(
-    (photo) => photo.photoId === photoId
-  ) as Photo;
+  const { width, height, size, description } =
+    (allPhotos.find((photo) => photo.photoId === photoId) as Photo) ?? {};
 
   const photoCenterXPosition =
     windowWidth / 2 - (photoPosition?.x ?? 0) - width / 2;
@@ -102,6 +100,9 @@ export const GalleryExpandedPhoto = ({
       ? VERTICAL_PHOTO_SCALE_PADDING
       : HORIZONTAL_PHOTO_SCALE_PADDING);
 
+  const maxPhotoHeight = height * maxScale;
+  const maxPhotoWidth = width * maxScale;
+
   const onLoadedImage = (image: HTMLImageElement) => {
     setIsPhotoLoaded(true);
 
@@ -111,11 +112,9 @@ export const GalleryExpandedPhoto = ({
         "transform",
         `translate(${photoCenterXPosition}px, ${photoCenterYPosition}px) scale(${maxScale})`
       );
-    } else {
-      image.style.setProperty("transform", `scale(${maxScale})`);
     }
   };
-
+  console.log("photoPosition", photoPosition);
   return (
     <div
       className={clsx(
@@ -124,36 +123,63 @@ export const GalleryExpandedPhoto = ({
       )}
       onClick={handleCloseExpandedMode}>
       <div
-        className="relative w-full h-full flex justify-center z-50"
+        className="relative text-red-600 w-full h-full flex justify-center z-50"
         onKeyDown={(e) => {
           e.preventDefault();
           e.stopPropagation();
         }}>
-        <Image
-          unoptimized
-          alt={description}
-          style={{
-            transform: "translate3d(0, 0, 0)",
-            objectFit: "contain",
-            top: (photoPosition?.y ?? 0) - scrollPosition,
-            left: photoPosition?.x ?? 0,
-          }}
-          src={getExpandedPhotoUrl(
-            photoId,
-            size !== PhotoSize.VERTICAL
-              ? HORIZONTAL_PHOTO_WIDTH
-              : VERTICAL_PHOTO_WIDTH
-          )}
-          width={width}
-          height={height}
-          placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
-          className={clsx(
-            "rounded-lg transition-all duration-[0.7s]",
-            photoPosition ? "fixed opacity-0" : "relative"
-          )}
-          onLoadingComplete={onLoadedImage}
-          priority
-        />
+        {photoPosition ? (
+          <Image
+            unoptimized
+            alt={description}
+            style={{
+              transform: "translate3d(0, 0, 0)",
+              objectFit: "contain",
+              ...(photoPosition
+                ? {
+                    top: (photoPosition?.y ?? 0) - scrollPosition,
+                    left: photoPosition?.x ?? 0,
+                  }
+                : {}),
+            }}
+            src={getExpandedPhotoUrl(
+              photoId,
+              size !== PhotoSize.VERTICAL
+                ? HORIZONTAL_PHOTO_WIDTH
+                : VERTICAL_PHOTO_WIDTH
+            )}
+            width={width}
+            height={height}
+            placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
+            className={clsx(
+              "rounded-lg transition-all duration-[0.7s]",
+              photoPosition && "fixed opacity-0"
+            )}
+            onLoadingComplete={onLoadedImage}
+            priority
+          />
+        ) : (
+          <Image
+            unoptimized
+            alt={description}
+            style={{
+              transform: "translate3d(0, 0, 0)",
+              objectFit: "contain",
+            }}
+            src={getExpandedPhotoUrl(
+              photoId,
+              size !== PhotoSize.VERTICAL
+                ? HORIZONTAL_PHOTO_WIDTH
+                : VERTICAL_PHOTO_WIDTH
+            )}
+            width={maxPhotoWidth}
+            height={maxPhotoHeight}
+            placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
+            className={clsx("rounded-lg relative")}
+            onLoadingComplete={onLoadedImage}
+            priority
+          />
+        )}
       </div>
     </div>
   );

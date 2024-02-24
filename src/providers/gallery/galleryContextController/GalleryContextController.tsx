@@ -6,6 +6,7 @@ import {
   PhotoDetails,
   PhotoPosition,
 } from "../galleryContext/GalleryContext.types";
+import { Photo } from "@/components/masonryGallery/MasonryGallery.types";
 
 export const GalleryContextController = ({
   children,
@@ -21,6 +22,7 @@ export const GalleryContextController = ({
 
   const [isPhotoLoaded, setIsPhotoLoaded] = useState(false);
   const [scrollPosition, setScrollPosition] = useState<number>(0);
+  const [allPhotos, setAllPhotos] = useState<Photo[]>([]);
 
   const handlePhotoDetailsChange = (photoDetails: PhotoDetails) => {
     setSelectedPhotoId(photoDetails.photoId);
@@ -42,6 +44,8 @@ export const GalleryContextController = ({
         setIsPhotoLoaded,
         setScrollPosition,
         scrollPosition,
+        allPhotos,
+        setAllPhotos,
         resetPhotoDetails: handleResetPhotoDetails,
         photoPosition: selectedPhotoPosition,
         setPhotoDetails: handlePhotoDetailsChange,

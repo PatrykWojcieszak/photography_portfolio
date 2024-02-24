@@ -36,10 +36,7 @@ export const Photo = ({ photo, masonryGalleryRef }: PhotoProps) => {
   };
 
   return (
-    <Link
-      href={`${pathname}?photo=${photo.photoId}`}
-      // as={`${pathname}/${photo.photoId}`}
-      shallow>
+    <Link href={`${pathname}/${photo.photoId}`} shallow>
       <div
         ref={photoRef}
         className="relative flex items-center justify-center"

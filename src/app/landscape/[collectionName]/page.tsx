@@ -49,10 +49,8 @@ export default async function Page({
   const photos = await getData(params.collectionName);
 
   return (
-    <GalleryContextController>
-      <Suspense>
-        <MasonryGallery photos={photos} />
-      </Suspense>
-    </GalleryContextController>
+    <Suspense>
+      <MasonryGallery photos={photos} />
+    </Suspense>
   );
 }

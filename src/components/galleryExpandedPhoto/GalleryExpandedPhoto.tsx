@@ -128,7 +128,7 @@ export const GalleryExpandedPhoto = ({
           e.preventDefault();
           e.stopPropagation();
         }}>
-        {photoPosition ? (
+        {photoPosition && (
           <Image
             unoptimized
             alt={description}
@@ -158,7 +158,8 @@ export const GalleryExpandedPhoto = ({
             onLoadingComplete={onLoadedImage}
             priority
           />
-        ) : (
+        )}
+        {!photoPosition && (
           <Image
             unoptimized
             alt={description}

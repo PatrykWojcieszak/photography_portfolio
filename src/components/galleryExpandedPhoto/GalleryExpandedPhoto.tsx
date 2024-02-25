@@ -4,7 +4,7 @@ import { useGalleryContextState } from "@/hooks/useGalleryContextState";
 import { GalleryExpandedPhotoProps } from "./GalleryExpandedPhoto.types";
 import { getExpandedPhotoUrl } from "@/utils/getExpandedPhotoUrl";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { clsx } from "clsx";
 import { shimmerLoader } from "@/utils/getShimmerLoader";
 import { Photo, PhotoSize } from "../masonryGallery/MasonryGallery.types";
@@ -21,6 +21,7 @@ export const GalleryExpandedPhoto = ({
   allPhotos,
 }: GalleryExpandedPhotoProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { height: windowHeight, width: windowWidth } = useWindowSize();
   const {
     photoPosition,
@@ -43,20 +44,22 @@ export const GalleryExpandedPhoto = ({
   const previousPhoto = allPhotos?.[currentPhotoIndexInArray - 1];
   const nextPhoto = allPhotos?.[currentPhotoIndexInArray + 1];
 
+  const url = pathname.substring(0, pathname.lastIndexOf("/") + 1);
+
   useEffect(() => {
     if (previousPhoto) {
-      router.prefetch(`/cars/${previousPhoto.photoId}`);
+      router.prefetch(`${url}/${previousPhoto.photoId}`);
     }
-  }, [previousPhoto, router]);
+  }, [previousPhoto, router, url]);
 
   useEffect(() => {
     if (nextPhoto) {
-      router.prefetch(`/cars/${nextPhoto.photoId}`);
+      router.prefetch(`${url}/${nextPhoto.photoId}`);
     }
-  }, [nextPhoto, router]);
+  }, [nextPhoto, router, url]);
 
   const changePhoto = (photoId: string) => {
-    router.replace(`/cars/${photoId}`, { scroll: false });
+    router.replace(`${url}/${photoId}`, { scroll: false });
     setPhotoDetails({
       photoId,
       photoPosition: undefined,
@@ -114,7 +117,7 @@ export const GalleryExpandedPhoto = ({
       );
     }
   };
-  console.log("photoPosition", photoPosition);
+
   return (
     <div
       className={clsx(

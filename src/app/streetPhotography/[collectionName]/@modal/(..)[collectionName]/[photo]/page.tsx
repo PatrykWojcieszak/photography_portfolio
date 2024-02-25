@@ -1,20 +1,23 @@
 import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
 import { GalleryExpandedPhoto } from "@/components/galleryExpandedPhoto/GalleryExpandedPhoto";
+import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
 import { Metadata } from "next";
-
-const COLLECTION_NAME = "cars";
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
-  params: { photo: string };
+  params: { collectionName: string };
+  searchParams: {
+    photo: string;
+  };
 }): Promise<Metadata> {
   return {
-    title: COLLECTION_NAME,
+    title: getPageTitleFromCollectionName(params.collectionName),
     openGraph: {
       images: [
         {
-          url: `/api/og?photo=${params.photo}`,
+          url: `/api/og?photo=${searchParams.photo}`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",
@@ -24,12 +27,16 @@ export async function generateMetadata({
   };
 }
 
-const getData = async () => {
-  return await fetchImageGallery(COLLECTION_NAME);
+const getData = async (collectionName: string) => {
+  return await fetchImageGallery(collectionName);
 };
 
-export default async function Page({ params }: { params: { photo: string } }) {
-  const photos = await getData();
+export default async function Page({
+  params,
+}: {
+  params: { photo: string; collectionName: string };
+}) {
+  const photos = await getData(params.collectionName);
 
   return (
     <GalleryExpandedPhoto

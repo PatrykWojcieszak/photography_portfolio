@@ -1,18 +1,43 @@
-import Link from 'next/link'
+import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
+import { ExpandedPhotoWithGallery } from "@/components/expandedPhotoWithGallery/ExpandedPhotoWithGallery";
+import { Metadata } from "next";
 
-export default async function Page() {
+const COLLECTION_NAME = "cars";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { photo: string };
+}): Promise<Metadata> {
+  return {
+    title: COLLECTION_NAME,
+    openGraph: {
+      images: [
+        {
+          url: `/api/og?photo=${params.photo}`,
+          width: 1200,
+          height: 630,
+          alt: "photo thumbnail",
+        },
+      ],
+    },
+  };
+}
+
+const getData = async () => {
+  return await fetchImageGallery(COLLECTION_NAME);
+};
+
+export default async function Page({ params }: { params: { photo: string } }) {
+  const photos = await getData();
+
   return (
-    <section className='py-24'>
-      <div className='container'>
-        <div>
-          <Link
-            href='/photos'
-            className='font-semibold italic text-sky-600 underline'
-          >
-            Back to photos
-          </Link>
-        </div>
-      </div>
-    </section>
-  )
+    <ExpandedPhotoWithGallery
+      photos={photos.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )}
+      selectedPhotoId={params.photo}
+    />
+  );
 }

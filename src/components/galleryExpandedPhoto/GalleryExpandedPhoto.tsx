@@ -15,6 +15,7 @@ const VERTICAL_PHOTO_WIDTH = 720;
 const HORIZONTAL_PHOTO_WIDTH = 1920;
 const VERTICAL_PHOTO_SCALE_PADDING = 0.2;
 const HORIZONTAL_PHOTO_SCALE_PADDING = 0.4;
+const NUMBER_OF_PRIORITY_PHOTOS = 15;
 
 export const GalleryExpandedPhoto = ({
   photoId,
@@ -181,7 +182,7 @@ export const GalleryExpandedPhoto = ({
             placeholder={`data:image/svg+xml;base64,${shimmerLoader}`}
             className={clsx("rounded-lg relative")}
             onLoadingComplete={onLoadedImage}
-            priority
+            priority={currentPhotoIndexInArray <= NUMBER_OF_PRIORITY_PHOTOS}
           />
         )}
       </div>

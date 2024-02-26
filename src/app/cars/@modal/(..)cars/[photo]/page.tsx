@@ -4,11 +4,11 @@ import { Metadata } from "next";
 
 const COLLECTION_NAME = "cars";
 
-export async function generateMetadata({
+export function generateMetadata({
   params,
 }: {
   params: { photo: string };
-}): Promise<Metadata> {
+}): Metadata {
   return {
     title: COLLECTION_NAME,
     openGraph: {

@@ -3,21 +3,17 @@ import { GalleryExpandedPhoto } from "@/components/galleryExpandedPhoto/GalleryE
 import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
 import { Metadata } from "next";
 
-export async function generateMetadata({
+export function generateMetadata({
   params,
-  searchParams,
 }: {
-  params: { collectionName: string };
-  searchParams: {
-    photo: string;
-  };
-}): Promise<Metadata> {
+  params: { collectionName: string; photo: string };
+}): Metadata {
   return {
     title: getPageTitleFromCollectionName(params.collectionName),
     openGraph: {
       images: [
         {
-          url: `/api/og?photo=${searchParams.photo}`,
+          url: `/api/og?photo=${params.photo}`,
           width: 1200,
           height: 630,
           alt: "photo thumbnail",

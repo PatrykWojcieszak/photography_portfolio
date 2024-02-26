@@ -3,23 +3,18 @@ import { Metadata } from "next";
 import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
 import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
 import { fetchCategories } from "@/app/api/actions/fetchCategories";
-import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 
 const COLLECTION_NAME = "landscape";
 
-export async function generateMetadata({
+export function generateMetadata({
   params,
 }: {
   params: { collectionName: string };
-  searchParams: {
-    photo: string;
-  };
-}): Promise<Metadata> {
+}): Metadata {
   return {
     title: getPageTitleFromCollectionName(params.collectionName),
-    metadataBase: new URL("https://photography-portfolio-sooty.vercel.app/"),
   };
 }
 

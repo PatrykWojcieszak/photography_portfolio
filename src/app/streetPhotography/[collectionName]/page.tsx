@@ -3,38 +3,18 @@ import { Metadata } from "next";
 import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
 import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
 import { fetchCategories } from "@/app/api/actions/fetchCategories";
-import { GalleryContextController } from "@/providers/gallery/galleryContextController/GalleryContextController";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 const COLLECTION_NAME = "streetPhotography";
 
-export async function generateMetadata({
+export function generateMetadata({
   params,
-  searchParams,
 }: {
   params: { collectionName: string };
-  searchParams: {
-    photo: string;
-  };
-}): Promise<Metadata> {
-  const categories = await fetchCategories(COLLECTION_NAME);
-  const categoryPhoto = categories.find(
-    (category) => category.collectionName === params.collectionName
-  )?.thumbnailId;
-
+}): Metadata {
   return {
     title: getPageTitleFromCollectionName(params.collectionName),
-    openGraph: {
-      images: [
-        {
-          url: `/api/og?photo=${searchParams.photo ?? categoryPhoto}`,
-          width: 1200,
-          height: 630,
-          alt: "photo thumbnail",
-        },
-      ],
-    },
   };
 }
 
@@ -64,10 +44,8 @@ export default async function Page({
   const photos = await getData(params.collectionName);
 
   return (
-    <GalleryContextController>
-      <Suspense>
-        <MasonryGallery photos={photos} />
-      </Suspense>
-    </GalleryContextController>
+    <Suspense>
+      <MasonryGallery photos={photos} />
+    </Suspense>
   );
 }

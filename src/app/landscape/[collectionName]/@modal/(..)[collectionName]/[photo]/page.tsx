@@ -37,7 +37,7 @@ export default async function Page({
   params: { photo: string; collectionName: string };
 }) {
   const photos = await getData(params.collectionName);
-  console.log("photos", photos);
+
   return (
     <GalleryExpandedPhoto
       photoId={params.photo}

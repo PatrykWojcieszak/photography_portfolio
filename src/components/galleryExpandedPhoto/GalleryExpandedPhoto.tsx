@@ -34,8 +34,8 @@ export const GalleryExpandedPhoto = ({
   } = useGalleryContextState();
 
   const handleCloseExpandedMode = () => {
-    router.back();
     resetPhotoDetails();
+    router.back();
   };
 
   const currentPhotoIndexInArray = allPhotos.findIndex(

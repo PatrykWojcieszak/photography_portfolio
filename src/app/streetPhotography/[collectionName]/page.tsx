@@ -29,9 +29,9 @@ export async function generateStaticParams() {
 const getData = async (collectionName: string) => {
   const photos = await fetchImageGallery(collectionName);
 
-  // if (!photos.length) {
-  //   return notFound();
-  // }
+  if (!photos.length) {
+    return notFound();
+  }
 
   return photos;
 };

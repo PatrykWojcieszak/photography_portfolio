@@ -18,6 +18,14 @@ export function generateMetadata({
   };
 }
 
+export async function generateStaticParams() {
+  const allCategories = await fetchCategories(COLLECTION_NAME);
+
+  return allCategories.map((category) => ({
+    collectionName: category.collectionName,
+  }));
+}
+
 const getData = async (collectionName: string) => {
   const photos = await fetchImageGallery(collectionName);
 

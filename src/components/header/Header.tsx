@@ -20,7 +20,7 @@ export const Header = () => {
           <Image
             onClick={() => router.back()}
             src={BackIcon}
-            alt="Instagram Icon"
+            alt="Back Icon"
             width={BACK_ICON_SIZE}
             className="cursor-pointer rounded-full bg-white"
           />

@@ -1,5 +1,5 @@
 import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
-import { ExpandedPhotoWithGallery } from "@/components/expandedPhotoWithGallery/ExpandedPhotoWithGallery";
+import { GalleryExpandedPhoto } from "@/components/galleryExpandedPhoto/GalleryExpandedPhoto";
 import { getPageTitleFromCollectionName } from "@/utils/getPageTitleFromCollectionName";
 import { Metadata } from "next";
 
@@ -35,12 +35,12 @@ export default async function Page({
   const photos = await getData(params.collectionName);
 
   return (
-    <ExpandedPhotoWithGallery
-      photos={photos.sort(
+    <GalleryExpandedPhoto
+      allPhotos={photos.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       )}
-      selectedPhotoId={params.photo}
+      photoId={params.photo}
     />
   );
 }

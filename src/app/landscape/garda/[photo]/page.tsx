@@ -1,5 +1,5 @@
 import { fetchImageGallery } from "@/app/api/actions/fetchImageGallery";
-import { ExpandedPhotoWithGallery } from "@/components/expandedPhotoWithGallery/ExpandedPhotoWithGallery";
+import { GalleryExpandedPhoto } from "@/components/galleryExpandedPhoto/GalleryExpandedPhoto";
 import { Metadata } from "next";
 
 const COLLECTION_NAME = "garda";
@@ -32,12 +32,12 @@ export default async function Page({ params }: { params: { photo: string } }) {
   const photos = await getData();
 
   return (
-    <ExpandedPhotoWithGallery
-      photos={photos.sort(
+    <GalleryExpandedPhoto
+      allPhotos={photos.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       )}
-      selectedPhotoId={params.photo}
+      photoId={params.photo}
     />
   );
 }

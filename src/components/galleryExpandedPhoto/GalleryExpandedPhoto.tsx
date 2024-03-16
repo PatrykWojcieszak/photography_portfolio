@@ -10,12 +10,16 @@ import { shimmerLoader } from "@/utils/getShimmerLoader";
 import { Photo, PhotoSize } from "../masonryGallery/MasonryGallery.types";
 import { useKeyPressEvent, useWindowSize } from "react-use";
 import { useEffect } from "react";
+import BackIcon from "@/../public/backArrow.svg";
 
 const VERTICAL_PHOTO_WIDTH = 720;
 const HORIZONTAL_PHOTO_WIDTH = 1920;
 const VERTICAL_PHOTO_SCALE_PADDING = 0.2;
 const HORIZONTAL_PHOTO_SCALE_PADDING = 0.4;
 const NUMBER_OF_PRIORITY_PHOTOS = 15;
+const BACK_ICON_SIZE = 26;
+const ARROW_LEFT_SHIFT = 40;
+const ARROW_RIGHT_SHIFT = 15;
 
 export const GalleryExpandedPhoto = ({
   photoId,
@@ -67,16 +71,24 @@ export const GalleryExpandedPhoto = ({
     });
   };
 
-  useKeyPressEvent("ArrowLeft", () => {
+  const handleSelectPreviousPhoto = () => {
     if (previousPhoto) {
       changePhoto(previousPhoto.photoId);
     }
-  });
+  };
 
-  useKeyPressEvent("ArrowRight", () => {
+  const handleSelectNextPhoto = () => {
     if (nextPhoto) {
       changePhoto(nextPhoto.photoId);
     }
+  };
+
+  useKeyPressEvent("ArrowLeft", () => {
+    handleSelectPreviousPhoto();
+  });
+
+  useKeyPressEvent("ArrowRight", () => {
+    handleSelectNextPhoto();
   });
 
   useKeyPressEvent("Escape", () => {
@@ -132,6 +144,46 @@ export const GalleryExpandedPhoto = ({
           e.preventDefault();
           e.stopPropagation();
         }}>
+        <Image
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSelectPreviousPhoto();
+          }}
+          src={BackIcon}
+          alt="Arrow left"
+          width={BACK_ICON_SIZE}
+          style={{
+            left: windowWidth / 2 - maxPhotoWidth / 2 - ARROW_LEFT_SHIFT,
+            top: windowHeight / 2,
+          }}
+          className={clsx(
+            "rounded-full fixed z-50 opacity-0 transition-opacity duration-[1.3s]",
+            isPhotoLoaded && "opacity-100",
+            previousPhoto
+              ? "bg-white cursor-pointer"
+              : "bg-neutral-600 cursor-not-allowed"
+          )}
+        />
+        <Image
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSelectNextPhoto();
+          }}
+          src={BackIcon}
+          alt="Arrow right"
+          width={BACK_ICON_SIZE}
+          style={{
+            left: windowWidth / 2 + maxPhotoWidth / 2 + ARROW_RIGHT_SHIFT,
+            top: windowHeight / 2,
+          }}
+          className={clsx(
+            "rounded-full fixed rotate-180 z-50 opacity-0 transition-opacity duration-[1.3s]",
+            isPhotoLoaded && "opacity-100",
+            nextPhoto
+              ? "bg-white cursor-pointer"
+              : "bg-neutral-600 cursor-not-allowed"
+          )}
+        />
         {photoPosition && (
           <Image
             unoptimized
